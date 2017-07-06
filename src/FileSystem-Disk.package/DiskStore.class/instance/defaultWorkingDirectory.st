@@ -1,3 +1,6 @@
 *FileSystem-Disk
 defaultWorkingDirectory
-	^self pathFromString: (OSPlatform current currentWorkingDirectoryPath)
+	"Answer the default working directory, which is defined as the directory where the image resides."
+
+	^ DefaultWorkingDirectory
+	ifNil: [ self class defaultWorkingDirectory ]
