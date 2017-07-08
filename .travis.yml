@@ -31,7 +31,6 @@ matrix:
 #    - os: linux
 #      env: JOB=test BOOTSTRAP_ARCH=64 PHARO_VERSION=60 TRAVIS_PULL_REQUEST=false
 
-
 addons:
   apt:
     packages:
