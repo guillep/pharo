@@ -1,7 +1,7 @@
 stage ("Checkout") {
     node('unix') {
         checkout scm
-		sh ls
+		sh "ls"
 		stash includes: 'bootstrap', name: 'bootstrap-src'
         stash includes: 'src', name: 'pharo-src'
         cleanWs()
