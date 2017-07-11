@@ -1,16 +1,44 @@
 stage ("Checkout") {
-    node('osx') {
+    node('unix-master') {
         checkout scm
-        sh "ls"
-        stash includes: 'bootstrap/scripts/bootstrap.sh', name: 'stashName'
+		stash includes: 'bootstrap', name: 'bootstrap-src'
+        stash includes: 'src', name: 'pharo-src'
         cleanWs()
     }
 }
 
+stage ("Fetch Requirements") {
+    node('unix-master') {
+		
+		dir ('builder') {
+			unstash 'bootstrap-src'
+			sh 'wget -O - get.pharo.org/60+vm | bash'
+			sh './pharo Pharo.image bootstrap/scripts/prepare_image.st --save --quit'
+		}
+        stash includes: 'builder', name: 'pharo-builder'
+		cleanWs()
+    }
+}
+
 stage ("Bootstrap") {
-    node('osx') {
-        unstash "stashName"
-        sh "ls"
+    node('unix-master') {
+		unstash 'pharo-builder'
+		dir ('builder') {
+			unstash 'pharo-src'
+			sh './pharo Pharo.image ./bootstrap/scripts/bootstrap.st --ARCH=32 --quit'
+			stash includes: 'bootstrap-cache'; name: 'bootstrap'
+		}	
+        cleanWs()
+    }
+}
+
+stage ("Full Image") {
+    node('unix-master') {
+		unstash 'pharo-builder'
+		dir ('builder') {
+			unstash 'bootstrap'
+			sh 'bash bootstrap/scripts/build.sh'
+		}
         cleanWs()
     }
 }
