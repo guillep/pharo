@@ -4,7 +4,7 @@ stage ("Fetch Requirements") {
 		checkout scm
 		dir ('builder') {
 			sh 'wget -O - get.pharo.org/60+vm | bash'
-			sh './pharo Pharo.image ./bootstrap/scripts/bootstrap.st --ARCH=32 --quit'
+			sh './pharo Pharo.image ../bootstrap/scripts/bootstrap.st --ARCH=32 --quit'
 			sh 'ls'
 		}
         stash includes: 'builder/**', name: 'pharo-builder'
