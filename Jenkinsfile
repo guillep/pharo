@@ -1,5 +1,6 @@
 stage ("Fetch Requirements") {
-    node('unix') {		
+    node('unix') {
+		cleanWs()
 		dir ('builder') {
 			sh 'wget https://github.com/guillep/PharoBootstrap/releases/download/v1.1/bootstrapImage.zip'
 			sh 'wget -O - get.pharo.org/vm60 | bash'
@@ -13,6 +14,7 @@ stage ("Fetch Requirements") {
 
 stage ("Bootstrap") {
     node('unix') {
+		cleanWs()
 		unstash 'pharo-builder'
 		sh 'ls'
 		dir ('builder') {
@@ -27,6 +29,7 @@ stage ("Bootstrap") {
 
 stage ("Full Image") {
     node('unix') {
+		cleanWs()
 		unstash 'bootstrap'
 		checkout scm
 		sh 'ls'
@@ -49,6 +52,7 @@ stage ("Test") {
         def label = x
         builders[label] = {
             node(label) {
+				cleanWs()
                 unstash 'bootstrap'
             }
         }
