@@ -2,8 +2,8 @@ stage ("Fetch Requirements") {
     node('unix') {
 		checkout scm
 		dir ('builder') {
-			sh 'wget https://github.com/guillep/PharoBootstrap/releases/download/v1.1/bootstrapImage.zip'
-			sh 'wget -O - get.pharo.org/vm60 | bash'
+			sh 'wget -O - get.pharo.org/60+vm | bash'
+			sh './pharo Pharo.image ./bootstrap/scripts/bootstrap.st --ARCH=32 --quit'
 		}
         stash includes: 'builder/**', name: 'pharo-builder'
 		cleanWs()
