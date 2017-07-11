@@ -2,8 +2,8 @@ stage ("Checkout") {
     node('unix') {
         checkout scm
 		sh "ls"
-		stash includes: 'bootstrap', name: 'bootstrap-src'
-        stash includes: 'src', name: 'pharo-src'
+		stash includes: 'bootstrap/**', name: 'bootstrap-src'
+        stash includes: 'src/**', name: 'pharo-src'
         cleanWs()
     }
 }
@@ -16,7 +16,7 @@ stage ("Fetch Requirements") {
 			sh 'wget -O - get.pharo.org/60+vm | bash'
 			sh './pharo Pharo.image bootstrap/scripts/prepare_image.st --save --quit'
 		}
-        stash includes: 'builder', name: 'pharo-builder'
+        stash includes: 'builder/**', name: 'pharo-builder'
 		cleanWs()
     }
 }
@@ -27,7 +27,7 @@ stage ("Bootstrap") {
 		dir ('builder') {
 			unstash 'pharo-src'
 			sh './pharo Pharo.image ./bootstrap/scripts/bootstrap.st --ARCH=32 --quit'
-			stash includes: 'bootstrap-cache'; name: 'bootstrap'
+			stash includes: 'bootstrap-cache/**'; name: 'bootstrap'
 		}	
         cleanWs()
     }
