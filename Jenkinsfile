@@ -15,7 +15,6 @@ stage ("Bootstrap") {
 		unstash 'pharo-builder'
 		dir ('builder') {
 			checkout scm
-			unstash 'pharo-src'
 			sh './pharo Pharo.image ./bootstrap/scripts/bootstrap.st --ARCH=32 --quit'
 			stash includes: 'bootstrap-cache/**', name: 'bootstrap'
 		}	
