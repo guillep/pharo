@@ -1,6 +1,7 @@
-stage ("Fetch Requirements") {
-    node('unix') {
-		cleanWs()
+node('unix') {
+	cleanWs()
+	
+	stage ("Fetch Requirements") {	
 		checkout scm
 		dir ('builder') {
 			sh 'wget -O - get.pharo.org/60+vm | bash'
@@ -10,11 +11,9 @@ stage ("Fetch Requirements") {
         stash includes: 'builder/**', name: 'pharo-builder'
 		cleanWs()
     }
-}
 
-stage ("Bootstrap") {
-    node('unix') {
-		cleanWs()
+	stage ("Bootstrap") {
+    	cleanWs()
 		unstash 'pharo-builder'
 		sh 'ls'
 		dir ('builder') {
@@ -25,11 +24,9 @@ stage ("Bootstrap") {
 		}	
         cleanWs()
     }
-}
 
-stage ("Full Image") {
-    node('unix') {
-		cleanWs()
+	stage ("Full Image") {
+    	cleanWs()
 		unstash 'bootstrap'
 		checkout scm
 		sh 'ls'
