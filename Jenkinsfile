@@ -1,5 +1,5 @@
 stage ("Checkout") {
-    node('unix-master') {
+    node('unix') {
         checkout scm
 		sh ls
 		stash includes: 'bootstrap', name: 'bootstrap-src'
@@ -9,7 +9,7 @@ stage ("Checkout") {
 }
 
 stage ("Fetch Requirements") {
-    node('unix-master') {
+    node('unix') {
 		
 		dir ('builder') {
 			unstash 'bootstrap-src'
@@ -22,7 +22,7 @@ stage ("Fetch Requirements") {
 }
 
 stage ("Bootstrap") {
-    node('unix-master') {
+    node('unix') {
 		unstash 'pharo-builder'
 		dir ('builder') {
 			unstash 'pharo-src'
@@ -34,7 +34,7 @@ stage ("Bootstrap") {
 }
 
 stage ("Full Image") {
-    node('unix-master') {
+    node('unix') {
 		unstash 'pharo-builder'
 		dir ('builder') {
 			unstash 'bootstrap'
@@ -46,7 +46,7 @@ stage ("Full Image") {
 
 stage ("Test") {
     // labels for Jenkins node types we will build on
-    def labels = ['osx', 'windows']
+    def labels = ['unix', 'osx', 'windows']
     def builders = [:]
     for (x in labels) {
         // Need to bind the label variable before the closure - can't do 'for (label in labels)'
