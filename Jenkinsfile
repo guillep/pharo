@@ -1,6 +1,6 @@
 stage ("Checkout") {
     node('osx') {
-        git "https://github.com/pharo-project/pharo.git"
+        checkout scm
         sh "ls"
         stash includes: 'bootstrap/scripts/bootstrap.sh', name: 'stashName'
         cleanWs()
