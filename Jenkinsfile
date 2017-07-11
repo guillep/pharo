@@ -6,6 +6,7 @@ stage ("Checkout") {
         cleanWs()
     }
 }
+
 stage ("Bootstrap") {
     node('osx') {
         unstash "stashName"
