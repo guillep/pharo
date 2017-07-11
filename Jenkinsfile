@@ -13,8 +13,8 @@ stage ("Fetch Requirements") {
 		
 		dir ('builder') {
 			unstash 'bootstrap-src'
-			sh 'wget -O - get.pharo.org/60+vm | bash'
-			sh './pharo Pharo.image bootstrap/scripts/prepare_image.st --save --quit'
+			sh 'wget https://github.com/guillep/PharoBootstrap/releases/download/v1.1/bootstrapImage.zip'
+			sh 'wget -O - get.pharo.org/vm60 | bash'
 		}
         stash includes: 'builder/**', name: 'pharo-builder'
 		cleanWs()
