@@ -5,7 +5,7 @@ node('unix') {
 		checkout scm
 		dir ('builder') {
 			sh 'wget -O - get.pharo.org/60+vm | bash'
-			sh './pharo Pharo.image ./bootstrap/scripts/prepare_image.st --save --quit'
+			sh './pharo Pharo.image ../bootstrap/scripts/prepare_image.st --save --quit'
 			sh 'ls'
 		}
         stash includes: 'builder/**', name: 'pharo-builder'
@@ -19,7 +19,7 @@ node('unix') {
 		dir ('builder') {
 			sh 'ls'
 			checkout scm
-			sh './pharo Pharo.image ./bootstrap/scripts/bootstrap.st --ARCH=32 --quit'
+			sh './pharo Pharo.image ../bootstrap/scripts/bootstrap.st --ARCH=32 --quit'
 			stash includes: 'bootstrap-cache/**', name: 'bootstrap'
 		}	
         cleanWs()
