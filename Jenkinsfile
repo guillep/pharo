@@ -1,18 +1,6 @@
-stage ("Checkout") {
-    node('unix') {
-        checkout scm
-		sh "ls"
-		stash includes: 'bootstrap/**', name: 'bootstrap-src'
-        stash includes: 'src/**', name: 'pharo-src'
-        cleanWs()
-    }
-}
-
 stage ("Fetch Requirements") {
-    node('unix') {
-		
+    node('unix') {		
 		dir ('builder') {
-			unstash 'bootstrap-src'
 			sh 'wget https://github.com/guillep/PharoBootstrap/releases/download/v1.1/bootstrapImage.zip'
 			sh 'wget -O - get.pharo.org/vm60 | bash'
 		}
@@ -25,9 +13,10 @@ stage ("Bootstrap") {
     node('unix') {
 		unstash 'pharo-builder'
 		dir ('builder') {
+			checkout scm
 			unstash 'pharo-src'
 			sh './pharo Pharo.image ./bootstrap/scripts/bootstrap.st --ARCH=32 --quit'
-			stash includes: 'bootstrap-cache/**'; name: 'bootstrap'
+			stash includes: 'bootstrap-cache/**', name: 'bootstrap'
 		}	
         cleanWs()
     }
@@ -35,11 +24,12 @@ stage ("Bootstrap") {
 
 stage ("Full Image") {
     node('unix') {
-		unstash 'pharo-builder'
-		dir ('builder') {
-			unstash 'bootstrap'
+		unstash 'bootstrap'
+		checkout scm
+		dir ('bootstrap-cache') {
 			sh 'bash bootstrap/scripts/build.sh'
 		}
+		stash includes: 'bootstrap-cache/**', name: 'bootstrap'
         cleanWs()
     }
 }
@@ -47,14 +37,14 @@ stage ("Full Image") {
 stage ("Test") {
     // labels for Jenkins node types we will build on
     def labels = ['unix', 'osx', 'windows']
+	def parts = ['A-L', 'M-Z']
     def builders = [:]
     for (x in labels) {
         // Need to bind the label variable before the closure - can't do 'for (label in labels)'
         def label = x
         builders[label] = {
             node(label) {
-                unstash "stashName"
-                sh "ls"
+                unstash 'bootstrap'
             }
         }
     }
