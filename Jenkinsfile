@@ -3,37 +3,16 @@ node('unix') {
 	
 	stage ("Fetch Requirements") {	
 		checkout scm
-		dir ('builder') {
-			sh 'wget -O - get.pharo.org/60+vm | bash'
-			sh './pharo Pharo.image ../bootstrap/scripts/prepare_image.st --save --quit'
-			sh 'ls'
-		}
-        stash includes: 'builder/**', name: 'pharo-builder'
-		cleanWs()
+		sh 'wget -O - get.pharo.org/60+vm | bash'
+		sh './pharo Pharo.image bootstrap/scripts/prepare_image.st --save --quit'
     }
 
 	stage ("Bootstrap") {
-    	cleanWs()
-		unstash 'pharo-builder'
-		sh 'ls'
-		dir ('builder') {
-			sh 'ls'
-			checkout scm
-			sh './pharo Pharo.image ../bootstrap/scripts/bootstrap.st --ARCH=32 --quit'
-			stash includes: 'bootstrap-cache/**', name: 'bootstrap'
-		}	
-        cleanWs()
+		sh './pharo Pharo.image bootstrap/scripts/bootstrap.st --ARCH=32 --quit'
     }
 
 	stage ("Full Image") {
-    	cleanWs()
-		unstash 'bootstrap'
-		checkout scm
-		sh 'ls'
-		dir ('bootstrap-cache') {
-			sh 'ls'
-			sh 'bash bootstrap/scripts/build.sh'
-		}
+		sh 'bash bootstrap/scripts/build.sh'
 		stash includes: 'bootstrap-cache/**', name: 'bootstrap'
         cleanWs()
     }
