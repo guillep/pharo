@@ -2,4 +2,5 @@ accessing
 initialize
 
 	super initialize.
-	self imageName: 'bootstrap.image'
+	self imageName: 'bootstrap.image'.
+	self repositoryDirectory: '.'

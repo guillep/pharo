@@ -1,4 +1,4 @@
 accessing
 originRepository
 
-	^ MCFileTreeRepository new directory: 'src' asFileReference
+	^ MCFileTreeRepository new directory: repositoryDirectory asFileReference / 'src'
