@@ -17,11 +17,11 @@ node('unix') {
 		dir(architecture) {
 		
 		stage ("Bootstrap") {
-			sh './pharo Pharo.image bootstrap/scripts/bootstrap.st --ARCH=${architecture} --repository=${pwd} --quit'
+			sh '../pharo ../Pharo.image bootstrap/scripts/bootstrap.st --ARCH=${architecture} --repository=${pwd} --quit'
 	    }
 
 		stage ("Full Image") {
-			sh 'bash bootstrap/scripts/build.sh -a ${label}'
+			sh 'bash ../bootstrap/scripts/build.sh -a ${label}'
 			stash includes: 'bootstrap-cache/**', name: 'bootstrap${architecture}'
 	    }
 			
