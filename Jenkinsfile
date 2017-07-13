@@ -15,9 +15,10 @@ node('unix') {
 
 	builders[architecture] = {
 		dir(architecture) {
+		def currentDirectory = pwd()
 		
 		stage ("Bootstrap") {
-			sh '../pharo ../Pharo.image bootstrap/scripts/bootstrap.st --ARCH=${architecture} --repository=${pwd()} --quit'
+			sh '../pharo ../Pharo.image bootstrap/scripts/bootstrap.st --ARCH=${architecture} --repository=${currentDirectory} --quit'
 	    }
 
 		stage ("Full Image") {
