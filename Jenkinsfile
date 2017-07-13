@@ -46,8 +46,6 @@ node('unix') {
 		    }
 		}
 		parallel testers
-		    
-		}
 		
 		}
 	} // end build block
