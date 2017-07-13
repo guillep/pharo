@@ -1,13 +1,5 @@
 node('unix') {
 	cleanWs()
-
-	def repositoryDirectory = pwd()
-	stage ("Fetch Requirements") {	
-		checkout scm
-		sh 'wget -O - get.pharo.org/60+vm | bash'
-		sh './pharo Pharo.image bootstrap/scripts/prepare_image.st --save --quit'
-    }
-
 	def builders = [:]
 	def architectures = ['32', '64']
 	for (x in architectures) {
@@ -17,9 +9,14 @@ node('unix') {
 	builders[architecture] = {
 		dir(architecture) {
 		
-		
+		stage ("Fetch Requirements") {	
+			checkout scm
+			sh 'wget -O - get.pharo.org/60+vm | bash'
+			sh './pharo Pharo.image bootstrap/scripts/prepare_image.st --save --quit'
+	    }
+
 		stage ("Bootstrap-${architecture}") {
-			sh "../pharo ../Pharo.image bootstrap/scripts/bootstrap.st --ARCH=${architecture} --repository=${repositoryDirectory} --quit"
+			sh "../pharo ../Pharo.image bootstrap/scripts/bootstrap.st --ARCH=${architecture} --quit"
 	    }
 
 		stage ("Full Image") {
