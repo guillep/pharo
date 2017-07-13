@@ -31,7 +31,7 @@ node('unix') {
 	        // Need to bind the label variable before the closure - can't do 'for (label in labels)'
 	        def label = x
 		    builders[label] = {
-	            node(label) {
+	            node(label) { stage("Tests-${label}-${architecture}"){
 					cleanWs()
 		            unstash 'bootstrap${architecture}'
 					
@@ -42,7 +42,7 @@ node('unix') {
 					
 					sh "wget -O - get.pharo.org${urlprefix}/vm70 | bash"
 					sh "./pharo bootstrap-cache/Pharo.image test --junit-xml-output \".*\""
-				}
+				}}
 		    }
 		}
 		parallel testers
