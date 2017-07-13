@@ -2,9 +2,9 @@ node('unix') {
 	cleanWs()
 	def builders = [:]
 	def architectures = ['32', '64']
-	for (x in architectures) {
+	for (arch in architectures) {
     // Need to bind the label variable before the closure - can't do 'for (label in labels)'
-    def architecture = x
+    def architecture = arch
 
 	builders[architecture] = {
 		dir(architecture) {
@@ -27,9 +27,9 @@ node('unix') {
 		// labels for Jenkins node types we will build on
 		def labels = ['unix', 'osx', 'windows']
 		def testers = [:]
-		for (x in labels) {
+		for (lab in labels) {
 	        // Need to bind the label variable before the closure - can't do 'for (label in labels)'
-	        def label = x
+	        def label = lab
 		    builders[label] = {
 	            node(label) { stage("Tests-${label}-${architecture}"){
 					cleanWs()
