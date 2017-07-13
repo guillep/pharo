@@ -20,7 +20,7 @@ node('unix') {
 	    }
 
 		stage ("Full Image-${architecture}") {
-			sh "bash ./bootstrap/scripts/build.sh -a ${architecture}"
+			sh "BOOTSTRAP_ARCH=${architecture} bash ./bootstrap/scripts/build.sh -a ${architecture}"
 			stash includes: "bootstrap-cache/**", name: "bootstrap${architecture}"
 	    }
 			
