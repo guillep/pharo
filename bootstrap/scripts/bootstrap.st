@@ -17,7 +17,7 @@ FileStream stdout
 	startFor: PBStepStartedSignal, PBStepFinishedSignal, PBSubStepFinishedSignal.
 
 (PBBootstrap forArchitecture: architecture)
-	repositoryDirectory: directory
+	repositoryDirectory: directory;
 	prepareBootstrap;
 	createImage
 
