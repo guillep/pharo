@@ -18,12 +18,12 @@ node('unix') {
 		def currentDirectory = pwd()
 		
 		stage ("Bootstrap") {
-			sh '../pharo ../Pharo.image bootstrap/scripts/bootstrap.st --ARCH=${architecture} --repository=${currentDirectory} --quit'
+			sh "../pharo ../Pharo.image bootstrap/scripts/bootstrap.st --ARCH=${architecture} --repository=${currentDirectory} --quit"
 	    }
 
 		stage ("Full Image") {
-			sh 'bash ../bootstrap/scripts/build.sh -a ${label}'
-			stash includes: 'bootstrap-cache/**', name: 'bootstrap${architecture}'
+			sh "bash ../bootstrap/scripts/build.sh -a ${architecture}"
+			stash includes: "bootstrap-cache/**", name: "bootstrap${architecture}"
 	    }
 			
 		}
