@@ -17,7 +17,7 @@ node('unix') {
 		dir(architecture) {
 		
 		stage ("Bootstrap") {
-			sh '../pharo ../Pharo.image bootstrap/scripts/bootstrap.st --ARCH=${architecture} --repository=${pwd} --quit'
+			sh '../pharo ../Pharo.image bootstrap/scripts/bootstrap.st --ARCH=${architecture} --repository=${pwd()} --quit'
 	    }
 
 		stage ("Full Image") {
