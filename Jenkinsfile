@@ -1,8 +1,8 @@
 node('unix') {
 	cleanWs()
 
+	def repositoryDirectory = pwd()
 	stage ("Fetch Requirements") {	
-		def repositoryDirectory = pwd()
 		checkout scm
 		sh 'wget -O - get.pharo.org/60+vm | bash'
 		sh './pharo Pharo.image bootstrap/scripts/prepare_image.st --save --quit'
