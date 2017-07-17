@@ -24,29 +24,6 @@ node('unix') {
 			stash includes: "bootstrap-cache/**", name: "bootstrap${architecture}"
 	    }
 		
-		// labels for Jenkins node types we will build on
-		def labels = ['unix', 'osx', 'windows']
-		def testers = [:]
-		for (lab in labels) {
-	        // Need to bind the label variable before the closure - can't do 'for (label in labels)'
-	        def label = lab
-		    builders[label] = {
-	            node(label) { stage("Tests-${label}-${architecture}"){
-					cleanWs()
-		            unstash 'bootstrap${architecture}'
-					
-					def urlprefix = ""
-					if (${architecture} == 64 ) {
-						urlprefix = "/64"
-					}
-					
-					sh "wget -O - get.pharo.org${urlprefix}/vm70 | bash"
-					sh "./pharo bootstrap-cache/Pharo.image test --junit-xml-output \".*\""
-				}}
-		    }
-		}
-		parallel testers
-		
 		}
 	} // end build block
 	
