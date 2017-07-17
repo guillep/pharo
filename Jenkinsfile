@@ -33,7 +33,7 @@ node('unix') {
 		    testers["${platform}-${architecture}"] = {
 	            node(platform) { stage("Tests-${platform}-${architecture}"){
 					cleanWs()
-		            unstash 'bootstrap${architecture}'
+		            unstash "bootstrap${architecture}"
 					
 					def urlprefix = ""
 					if (${architecture} == 64 ) {
