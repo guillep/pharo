@@ -36,7 +36,7 @@ node('unix') {
 		            unstash "bootstrap${architecture}"
 					
 					def urlprefix = ""
-					if (${architecture} == 64 ) {
+					if (architecture == "64" ) {
 						urlprefix = "/64"
 					}
 					
