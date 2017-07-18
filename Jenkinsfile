@@ -32,6 +32,7 @@ node('unix') {
 	        def platform = platf
 		    testers["${platform}-${architecture}"] = {
 	            node(platform) { stage("Tests-${platform}-${architecture}"){
+					try {
 					cleanWs()
 		            unstash "bootstrap${architecture}"
 					
@@ -52,6 +53,10 @@ node('unix') {
 					sh "wget -O - get.pharo.org${urlprefix}/vm70 | bash"
 					sh "./pharo Pharo.image test --junit-xml-output \".*\""
 					junit "*.xml"
+					} catch (Exception e) {
+						println(e)
+						throw e
+					}
 				}}
 		    }
 		}
