@@ -38,15 +38,12 @@ def runTests(architecture, prefix=''){
 
 def notifyBuild(status){
 	sh "printenv"
-	mail
-		to: 'guillermopolito@gmail.com',
-//		cc: 'guillermopolito@gmail.com',
-		subject: "Build #${env.BUILD_NUMBER}: ${status}",
-		body: "There is a new build of Pharo available in ${env.BUILD_URL}.
+	def body = "There is a new build of Pharo available in ${env.BUILD_URL}.
 
 The status of the build is: ${status}.
 
 "
+	mail to: 'guillermopolito@gmail.com', cc: 'guillermopolito@gmail.com', subject: "Build #${env.BUILD_NUMBER}: ${status}", body: body
 	
 	
 }
