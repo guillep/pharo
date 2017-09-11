@@ -1,5 +1,3 @@
-import hudson.tasks.test.AbstractTestResultAction
-
 def isWindows(){
     return env.NODE_LABELS.toLowerCase().contains('windows')
 }
@@ -36,9 +34,26 @@ def runTests(architecture, prefix=''){
 	}
 	archiveArtifacts allowEmptyArchive: true, artifacts: '*.xml', fingerprint: true
 	cleanWs()
-} 
+}
+
+def notifyBuild(status){
+	printenv
+	mail
+		to: 'guillermopolito@gmail.com',
+//		cc: 'guillermopolito@gmail.com',
+		subject: "Build #${env.BUILD_NUMBER}: ${status}",
+		body: "There is a new build of Pharo available in ${env.BUILD_URL}.
+
+The status of the build is: ${status}.
+
+"
+	
+	
+}
 
 node('unix') {
+	notifyBuild("SUCCESS")
+	return;
 	cleanWs()
 	def builders = [:]
 	def architectures = ['32']//, '64']
