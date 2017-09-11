@@ -113,7 +113,7 @@ node('unix') {
 	
 	parallel builders
 }
-
+	return;
 //Testing step
 def testers = [:]
 def architectures = ['32']//, '64']
