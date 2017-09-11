@@ -37,7 +37,7 @@ def runTests(architecture, prefix=''){
 }
 
 def notifyBuild(status){
-	printenv
+	sh "printenv"
 	mail
 		to: 'guillermopolito@gmail.com',
 //		cc: 'guillermopolito@gmail.com',
