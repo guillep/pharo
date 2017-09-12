@@ -42,6 +42,7 @@ def notifyBuild(status){
 
 The status of the build is: ${status}.
 ls
+
 """
 	mail to: 'guillermopolito@gmail.com', cc: 'guillermopolito@gmail.com', subject: "Build #${env.BUILD_NUMBER}: ${status}", body: body
 	
@@ -114,6 +115,7 @@ node('unix') {
 	parallel builders
 }
 	return;
+	//Force merge
 //Testing step
 def testers = [:]
 def architectures = ['32']//, '64']
