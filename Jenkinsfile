@@ -1,5 +1,3 @@
-import hudson.tasks.test.AbstractTestResultAction
-
 def isWindows(){
     return env.NODE_LABELS.toLowerCase().contains('windows')
 }
@@ -36,9 +34,23 @@ def runTests(architecture, prefix=''){
 	}
 	archiveArtifacts allowEmptyArchive: true, artifacts: '*.xml', fingerprint: true
 	cleanWs()
-} 
+}
+
+def notifyBuild(status){
+	sh "printenv"
+	def body = """There is a new build of Pharo available in ${env.BUILD_URL}.
+
+The status of the build is: ${status}.
+
+"""
+	mail to: 'guillermopolito@gmail.com', cc: 'guillermopolito@gmail.com', subject: "Build #${env.BUILD_NUMBER}: ${status}", body: body
+	
+	
+}
 
 node('unix') {
+	notifyBuild("SUCCESS")
+	return;
 	cleanWs()
 	def builders = [:]
 	def architectures = ['32']//, '64']
@@ -101,7 +113,8 @@ node('unix') {
 	
 	parallel builders
 }
-
+	return;
+	//Force merge
 //Testing step
 def testers = [:]
 def architectures = ['32']//, '64']
