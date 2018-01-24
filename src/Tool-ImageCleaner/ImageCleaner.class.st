@@ -71,7 +71,7 @@ ImageCleaner >> cleanUpForProduction [
 ImageCleaner >> cleanUpForRelease [
 	"self new cleanUpForRelease"
 
-	Author fullName: 'MrCleaner'.
+	Author fullName: 'Mr.Cleaner'.
 	self cleanUpMethods.
 	
 	FreeTypeFontProvider current initialize.
