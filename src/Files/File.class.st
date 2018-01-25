@@ -215,7 +215,7 @@ File >> openForWrite: writeMode [
 		FileException signal: 'Cannot open file: ', name.
 	].
 
-	rawStream := BinaryFileStream handle: fileHandle file: self forWrite: writeMode;
+	rawStream := (BinaryFileStream handle: fileHandle file: self forWrite: writeMode)
 		register;
 		yourself.
 
