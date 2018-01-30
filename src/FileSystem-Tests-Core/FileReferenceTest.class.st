@@ -755,7 +755,7 @@ FileReferenceTest >> testReadStreamDoNotFound [
 	ref := filesystem / 'plonk'.
 	self
 		should: [ref readStreamDo: [:s]]
-		raise: FileDoesNotExist 
+		raise: FileDoesNotExistException
 ]
 
 { #category : #tests }
@@ -800,7 +800,7 @@ FileReferenceTest >> testReadStreamNotFound [
 	ref := filesystem * 'plonk'.
 	self
 		should: [ref readStream]
-		raise: FileDoesNotExist 
+		raise: FileDoesNotExistException
 ]
 
 { #category : #tests }
