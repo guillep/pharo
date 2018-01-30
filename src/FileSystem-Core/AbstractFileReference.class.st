@@ -154,6 +154,19 @@ AbstractFileReference >> binaryReadStreamIfAbsent: absentBlock [
 		ifFalse: absentBlock
 ]
 
+{ #category : #streams }
+AbstractFileReference >> binaryWriteStream [
+	self subclassResponsibility
+]
+
+{ #category : #streams }
+AbstractFileReference >> binaryWriteStreamDo: aBlock [
+	| stream |
+	stream := self binaryWriteStream.
+	^ [ aBlock value: stream ]
+		ensure: [ stream close ]
+]
+
 { #category : #delegated }
 AbstractFileReference >> canonicalize [
 	"Answer the receiver with references to the current folder (.) and parent folder (..) removed"

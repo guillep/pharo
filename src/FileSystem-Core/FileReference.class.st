@@ -82,9 +82,16 @@ FileReference >> asFileReference [
 	^ self
 ]
 
-{ #category : #'streams-compatibility' }
+{ #category : #streams }
 FileReference >> binaryReadStream [
+	
 	^ filesystem binaryReadStreamOn: self path
+]
+
+{ #category : #streams }
+FileReference >> binaryWriteStream [
+	
+	^ filesystem binaryWriteStreamOn: self path
 ]
 
 { #category : #comparing }
