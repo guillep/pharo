@@ -99,7 +99,7 @@ SystemDependenciesTest >> knownKernelDependencies [
 
 	"ideally this list should be empty"	
 
-	^ #(#CodeExport #CodeImportCommandLineHandlers #DeprecatedFileStream #'FileSystem-Core' #Monticello #'OpalCompiler-Core' #'Ring-Core-Kernel' #'System-Changes' #'System-Localization')
+	^ #(#CodeExport #CodeImport #CodeImportCommandLineHandlers #DeprecatedFileStream #'FileSystem-Core' #Monticello #'OpalCompiler-Core' #'Ring-Core-Kernel' #'System-Changes' #'System-Localization')
 ]
 
 { #category : #'known dependencies' }
@@ -155,7 +155,7 @@ SystemDependenciesTest >> knownSUnitKernelDependencies [
 
 	"ideally this list should be empty"	
 
-	^ #(#CodeExport #CodeImportCommandLineHandlers #DeprecatedFileStream #'FileSystem-Core' #Monticello #'OpalCompiler-Core' #'Ring-Core-Kernel' #'System-Changes' #'System-Localization')
+	^ #(#CodeExport #CodeImport #CodeImportCommandLineHandlers #DeprecatedFileStream #'FileSystem-Core' #Monticello #'OpalCompiler-Core' #'Ring-Core-Kernel' #'System-Changes' #'System-Localization')
 ]
 
 { #category : #'known dependencies' }
