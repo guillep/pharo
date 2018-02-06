@@ -114,7 +114,7 @@ VM=./vm/pharo
 cd "${CACHE}"
 
 #We need the old sources file next to the image because of sources condensation step
-wget http://files.pharo.org/sources/PharoV60.sources
+#wget http://files.pharo.org/sources/PharoV60.sources
 
 #Prepare
 echo "Prepare Bootstrap files"
@@ -129,21 +129,21 @@ zip "${HERMES_ARCHIVE_NAME}.zip" OpalCompiler-Core.hermes CodeExport.hermes Code
 # Archive RPackage definitions
 zip "${RPACKAGE_ARCHIVE_NAME}.zip" protocolsKernel.txt packagesKernel.txt
 
-${REPOSITORY}/bootstrap/scripts/download_vm.sh
+#${REPOSITORY}/bootstrap/scripts/download_vm.sh
 
 echo "Prepare icons"
-mkdir icon-packs
-cd icon-packs
-wget http://github.com/pharo-project/pharo-icon-packs/archive/idea11.zip
-cd ..
+#mkdir icon-packs
+#cd icon-packs
+#wget http://github.com/pharo-project/pharo-icon-packs/archive/idea11.zip
+#cd ..
 
 # Find st-cache path
 [[ -z "${BOOTSTRAP_CACHE}" ]] && ST_CACHE='st-cache' || ST_CACHE="${BOOTSTRAP_CACHE}/st-cache"
 
 # Installing RPackage
 echo "[Compiler] Installing RPackage"
-${VM} "${COMPILER_IMAGE_NAME}.image" # I have to run once the image so the next time it starts the CommandLineHandler.
-${VM} "${COMPILER_IMAGE_NAME}.image" initializePackages --protocols=protocolsKernel.txt --packages=packagesKernel.txt --save
+${VM} "${COMPILER_IMAGE_NAME}.image" --no-source # I have to run once the image so the next time it starts the CommandLineHandler.
+${VM} "${COMPILER_IMAGE_NAME}.image" initializePackages --no-source --protocols=protocolsKernel.txt --packages=packagesKernel.txt --save
 
 # Installing compiler through Hermes 
 echo "[Compiler] Installing compiler through Hermes"
