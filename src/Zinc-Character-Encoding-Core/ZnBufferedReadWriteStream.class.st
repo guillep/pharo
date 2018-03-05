@@ -50,7 +50,7 @@ ZnBufferedReadWriteStream >> close [
 	writeStream close.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ZnBufferedReadWriteStream >> closed [
 	"Ask the underlying stream if closed.
 	This method is meant to be used with file and or socket streams.
@@ -182,7 +182,7 @@ ZnBufferedReadWriteStream >> setToEnd [
 		writeStream setToEnd ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ZnBufferedReadWriteStream >> size [
 	^ readStream size
 ]
