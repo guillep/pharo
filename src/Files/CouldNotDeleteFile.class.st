@@ -1,5 +1,5 @@
 "
-Notfify when not able to delete
+Notifies when a file cannot be deleted for a reason other than FileDoesNotExist.
 "
 Class {
 	#name : #CouldNotDeleteFile,

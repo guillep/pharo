@@ -213,7 +213,7 @@ File >> openForWrite: writeMode [
 		Otherwise, we throw a generic FileException."
 		self exists
 			ifFalse: [ ^ FileDoesNotExistException signalWithFile: self writeMode: writeMode ].
-		CouldNotDeleteFile signal: name
+		CouldNotOpenFile signal: name
 	].
 
 	rawStream := (BinaryFileStream handle: fileHandle file: self forWrite: writeMode)

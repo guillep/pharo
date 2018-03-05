@@ -45,7 +45,7 @@ Stdio class >> standardIOStreamNamed: moniker forWrite: forWrite [
 	Smalltalk os isWin32 
 		ifTrue: [ 
 			[ ^ (File named: moniker asString) writeStream ]
-			on: CouldNotDeleteFile do: [
+			on: CouldNotOpenFile do: [
 				"HACK: if the image is opened a second time windows barks about the already opened locked file"
 				^ (File named: moniker asString, '_', (Random new nextInt: SmallInteger maxVal) asString) writeStream ]]. 	
 
