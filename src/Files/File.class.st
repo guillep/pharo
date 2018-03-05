@@ -144,7 +144,7 @@ File >> checkDoesNotExist [
 	In this case, this method returns a new file with the options selected by the user.
 	"
 	self exists ifTrue: [
-		^ FileAlreadyExistsException signalOnFile: self ]
+		^ FileAlreadyExists signalOnFile: self ]
 ]
 
 { #category : #'open/close' }
@@ -155,7 +155,7 @@ File >> delete [
 		until: [ :result | result notNil ]
 		forFileNamed: name.
 	self exists
-		ifTrue: [ (CannotDeleteFileException new messageText: 'Could not delete file ' , name,'. Check the file is not open.') signal ].
+		ifTrue: [ (CouldNotDeleteFile new messageText: 'Could not delete file ' , name,'. Check the file is not open.') signal ].
 ]
 
 { #category : #'open/close' }
@@ -213,7 +213,7 @@ File >> openForWrite: writeMode [
 		Otherwise, we throw a generic FileException."
 		self exists
 			ifFalse: [ ^ FileDoesNotExistException signalWithFile: self writeMode: writeMode ].
-		CannotDeleteFileException signal: name
+		CouldNotDeleteFile signal: name
 	].
 
 	rawStream := (BinaryFileStream handle: fileHandle file: self forWrite: writeMode)

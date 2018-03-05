@@ -252,7 +252,7 @@ FileStream class >> standardIOStreamNamed: moniker forWrite: forWrite [
 	Smalltalk os isWin32 
 		ifTrue: [ 
 			[ ^ MultiByteFileStream forceNewFileNamed: moniker asString ]
-			on: CannotDeleteFileException do: [
+			on: CouldNotDeleteFile do: [
 				"HACK: if the image is opened a second time windows barks about the already opened locked file"
 				^ MultiByteFileStream forceNewFileNamed: moniker asString, '_', (Random new nextInt: SmallInteger maxVal) asString   ]]. 	
 	

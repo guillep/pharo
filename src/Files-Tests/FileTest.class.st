@@ -17,7 +17,7 @@ FileTest >> testCheckExistenceOfExistingFileThrowsException [
 	| file |
 	file := File named: 'asd.txt'.
 	file writeStream close.
-	self should: [file checkDoesNotExist] raise: FileAlreadyExistsException.
+	self should: [file checkDoesNotExist] raise: FileAlreadyExists.
 ]
 
 { #category : #tests }

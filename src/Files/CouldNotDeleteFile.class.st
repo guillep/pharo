@@ -2,7 +2,7 @@
 Notfify when not able to delete
 "
 Class {
-	#name : #CannotDeleteFileException,
+	#name : #CouldNotDeleteFile,
 	#superclass : #FileException,
 	#category : #'Files-Core'
 }

@@ -89,7 +89,7 @@ StandardFileStream class >> forceNewFileNamed: fileName [
 			
 	dir := fullName asFileReference.
 	dir delete.
-	dir exists ifTrue: [(CannotDeleteFileException new
+	dir exists ifTrue: [(CouldNotDeleteFile new
 			messageText: 'Could not delete the old version of file ' , fullName) signal].
 		
 	f := self new open: fullName forWrite: true.

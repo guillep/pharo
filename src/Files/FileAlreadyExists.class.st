@@ -2,7 +2,7 @@
 I am an exception that notifies that a file already exists.
 "
 Class {
-	#name : #FileAlreadyExistsException,
+	#name : #FileAlreadyExists,
 	#superclass : #FileException,
 	#instVars : [
 		'file'
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #'instance-creation' }
-FileAlreadyExistsException class >> signalOnFile: aFile [ 
+FileAlreadyExists class >> signalOnFile: aFile [ 
 	
 	self new
 		file: aFile;
@@ -19,18 +19,18 @@ FileAlreadyExistsException class >> signalOnFile: aFile [
 ]
 
 { #category : #accessing }
-FileAlreadyExistsException >> file [
+FileAlreadyExists >> file [
 	^ file
 ]
 
 { #category : #accessing }
-FileAlreadyExistsException >> file: aFile [
+FileAlreadyExists >> file: aFile [
 	
 	file := aFile
 ]
 
 { #category : #accessing }
-FileAlreadyExistsException >> messageText [
+FileAlreadyExists >> messageText [
 
 	^ 'File already exists: ', file name
 ]
