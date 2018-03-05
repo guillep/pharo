@@ -52,6 +52,9 @@ ZnBufferedReadWriteStream >> close [
 
 { #category : #'as yet unclassified' }
 ZnBufferedReadWriteStream >> closed [
+	"Ask the underlying stream if closed.
+	This method is meant to be used with file and or socket streams.
+	Otherwise, you may get a does not understand error."
 	^ readStream closed
 ]
 

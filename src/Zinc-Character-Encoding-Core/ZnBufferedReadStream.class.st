@@ -49,6 +49,9 @@ ZnBufferedReadStream >> close [
 
 { #category : #testing }
 ZnBufferedReadStream >> closed [
+	"Ask the underlying stream if closed.
+	This method is meant to be used with file and or socket streams.
+	Otherwise, you may get a does not understand error."
 	^ stream closed
 ]
 
