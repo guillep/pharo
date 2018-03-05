@@ -1,5 +1,5 @@
 "
-I am a read-write character stream. I am mainly used to open the Pharo source and changes files.
+I am a read-write character stream. I am used to open Pharo source and changes files.
 "
 Class {
 	#name : #ZnCharacterReadWriteStream,
