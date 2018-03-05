@@ -74,7 +74,7 @@ BaselineOfPharoBootstrap >> baseline: spec [
 		spec package: 'Shift-Changes'.
 		spec package: 'Shift-ClassBuilder'.
 		spec package: 'Shift-ClassInstaller'.
-		spec package: 'Slot'.
+		spec package: 'Slot-Core'.
 		spec package: 'System-Announcements'.
 		spec package: 'System-BasicCommandLineHandler'.
 		spec package: 'System-CommandLine'.
@@ -87,7 +87,6 @@ BaselineOfPharoBootstrap >> baseline: spec [
 		spec package: 'System-Sources'.
 		spec package: 'System-Support'.
 		spec package: 'Traits'.
-		spec package: 'Transcript-Core'.
 		spec package: 'UIManager'.
 		spec package: 'Zinc-Character-Encoding-Core'.
 		
@@ -141,7 +140,7 @@ BaselineOfPharoBootstrap >> baseline: spec [
 			'Shift-Changes'.
 			'Shift-ClassBuilder'.
 			'Shift-ClassInstaller'.
-			'Slot'.
+			'Slot-Core'.
 			'System-Announcements'.
 			'System-BasicCommandLineHandler'.
 			'System-CommandLine'.
@@ -154,7 +153,6 @@ BaselineOfPharoBootstrap >> baseline: spec [
 			'System-Sources'.
 			'System-Support'.
 			'Traits'.
-			'Transcript-Core'.
 			'UIManager'.
 			'Zinc-Character-Encoding-Core'.
 			'InitializePackagesCommandLineHandler'.

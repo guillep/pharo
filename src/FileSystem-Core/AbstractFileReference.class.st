@@ -156,14 +156,19 @@ AbstractFileReference >> binaryReadStreamIfAbsent: absentBlock [
 
 { #category : #streams }
 AbstractFileReference >> binaryWriteStream [
-	self subclassResponsibility
+	"Answer a binary write stream on the receiver"
+
+	^ self subclassResponsibility
 ]
 
-{ #category : #streams }
+{ #category : #compatibility }
 AbstractFileReference >> binaryWriteStreamDo: aBlock [
+	"Pass a binary write stream on the receiver to the supplied block, and ensure that the stream is closed after evaluation."
+
 	| stream |
+
 	stream := self binaryWriteStream.
-	^ [ aBlock value: stream ]
+	^ [ aBlock value: stream ] 
 		ensure: [ stream close ]
 ]
 

@@ -202,8 +202,9 @@ File >> openForWrite [
 ]
 
 { #category : #'open/close' }
-File >> openForWrite: writeMode [ 
+File >> openForWrite: writeMode [
 	"Open the file with the given name. If writeMode is true, allow writing, otherwise open the file in read-only mode."
+
 	| fileHandle rawStream |
 	fileHandle := self basicOpenForWrite: writeMode.
 	fileHandle ifNil: [
@@ -212,7 +213,7 @@ File >> openForWrite: writeMode [
 		Otherwise, we throw a generic FileException."
 		self exists
 			ifFalse: [ ^ FileDoesNotExistException signalWithFile: self writeMode: writeMode ].
-		FileException signal: 'Cannot open file: ', name.
+		CannotDeleteFileException signal: name
 	].
 
 	rawStream := (BinaryFileStream handle: fileHandle file: self forWrite: writeMode)

@@ -90,7 +90,8 @@ FileReference >> binaryReadStream [
 
 { #category : #streams }
 FileReference >> binaryWriteStream [
-	
+	"Answer a binary write stream on the receiver"
+
 	^ filesystem binaryWriteStreamOn: self path
 ]
 
