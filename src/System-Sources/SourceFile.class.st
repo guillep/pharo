@@ -52,6 +52,8 @@ SourceFile >> cr [
 { #category : #accessing }
 SourceFile >> flush [
 
+	self closed ifTrue: [ ^ self ].
+	stream isReadOnly ifTrue: [ ^ self ].
 	stream flush
 ]
 
