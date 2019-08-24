@@ -187,7 +187,7 @@ OSSDL2WindowHandle >> isTextInputActive [
 
 { #category : #testing }
 OSSDL2WindowHandle >> isValid [
-	^ true
+	^ handle notNil and: [ handle isNull not ]
 ]
 
 { #category : #testing }

@@ -305,7 +305,7 @@ OSMorphicWindow >> render [
 { #category : #accessing }
 OSMorphicWindow >> restoreMorphicDisplay [ 
 
-	self createWindow.
+	osWindow isValid ifFalse: [self createWindow].
 	root
 		extent: self actualScreenSize;
 		viewBox: self viewBox;
