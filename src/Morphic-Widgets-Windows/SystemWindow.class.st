@@ -443,6 +443,8 @@ SystemWindow class >> windowMenuOn: aBuilder [
 		withSeparatorAfter.
 	(aBuilder item: #'Send to back')
 		action: [ aBuilder model sendToBack ].
+	(aBuilder item: #'Pop out of World')
+		action: [ aBuilder model popOutOfWorld ].
 	(aBuilder item: #'Make next-to-topmost')
 		action: [ aBuilder model makeSecondTopmost ];
 		withSeparatorAfter.
@@ -1500,6 +1502,24 @@ SystemWindow >> panelRect [
 	"Answer the area below the title bar which is devoted to panes."
 
 	^ self innerBounds insetBy: (0 @ self labelHeight corner: 0 @ 0)
+]
+
+{ #category : #popout }
+SystemWindow >> popOutOfWorld [
+	
+	| root |
+	root := PanelMorph new.
+	root
+		extent: self extent;
+		layoutPolicy: self layoutPolicy;
+		hResizing: #spaceFill;
+		vResizing: #spaceFill.
+	self paneMorphs do: [ :e | 
+		self removeMorph: e.
+		root addMorphBack: e ].
+	self delete.
+
+	OSMorphicWindow openOn: root.
 ]
 
 { #category : #geometry }
