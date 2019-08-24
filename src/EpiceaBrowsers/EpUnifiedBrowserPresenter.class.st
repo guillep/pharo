@@ -135,7 +135,7 @@ EpUnifiedBrowserPresenter >> refreshIfMonitorLogSelected [
 	| item |
 	item := self logNodesPresenter logNodesTreePresenter selectedItem.
 	item ifNil: [ ^ self ].	"Nothing to refresh"
-	item content isMonitor
+	item isMonitor
 		ifFalse: [ ^ self ].	"Monitor log isn't selected"
 	self logPresenter refresh
 ]
