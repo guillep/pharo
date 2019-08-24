@@ -171,6 +171,12 @@ AbstractWorldRenderer >> restoreMorphicDisplay [
 
 ]
 
+{ #category : #operations }
+AbstractWorldRenderer >> updateAreas: damagedRectangles [
+
+	self subclassResponsibility
+]
+
 { #category : #initialization }
 AbstractWorldRenderer >> usableArea [
 
