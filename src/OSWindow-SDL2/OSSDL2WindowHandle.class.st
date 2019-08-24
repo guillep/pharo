@@ -94,6 +94,7 @@ OSSDL2WindowHandle >> deliverGlobalEvent: aGlobalEvent [
 OSSDL2WindowHandle >> destroy [
 	handle ifNotNil: [ :validHandle | 
 		OSSDL2Driver current unregisterWindowWithId: validHandle windowID.
+		renderer destroy.
 		validHandle destroy
 	].
 
