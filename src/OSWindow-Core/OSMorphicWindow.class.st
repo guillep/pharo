@@ -102,6 +102,8 @@ OSMorphicWindow >> checkForNewScreenSize [
 	osWindow renderer form: display.
 
 	root worldState realWindowExtent: self actualScreenSize.
+	root submorphs do: [ :e | e extent: self actualScreenSize ].
+	self restoreMorphicDisplay.
 	"force render"
 	self render
 ]
