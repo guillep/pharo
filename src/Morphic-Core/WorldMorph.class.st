@@ -95,8 +95,8 @@ WorldMorph class >> doOneCycle [
 	].
 
 	(self currentWorld isNotNil and: [(self extraWorldList includes: self currentWorld) not]) ifTrue: [
+		ActiveHand := self currentWorld activeHand.
 		self currentWorld doOneCycle.
-		ActiveHand := self currentWorld activeHand
 	]
 ]
 
@@ -207,13 +207,10 @@ WorldMorph >> becomeActiveDuring: aBlock [
 	ActiveWorld := self.
 	ActiveHand := self hands first.	"default"
 	ActiveEvent := nil.	"not in event cycle"
-	aBlock
-		on: Error
-		do: [ :ex | 
-			ActiveWorld := priorWorld.
-			ActiveEvent := priorEvent.
-			ActiveHand := priorHand.
-			ex pass ]
+	aBlock ensure: [
+		ActiveWorld := priorWorld.
+		ActiveEvent := priorEvent.
+		ActiveHand := priorHand ]
 ]
 
 { #category : #'meta-actions' }

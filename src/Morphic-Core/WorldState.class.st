@@ -776,7 +776,7 @@ WorldState >> runLocalStepMethodsIn: aWorld [
 	now := Time millisecondClockValue.
 	priorWorld := ActiveWorld.
 	ActiveWorld := aWorld.
-	self triggerAlarmsBefore: now.
+	[self triggerAlarmsBefore: now.
 	stepList isEmpty 
 		ifTrue: 
 			[ActiveWorld := priorWorld.
@@ -796,7 +796,7 @@ WorldState >> runLocalStepMethodsIn: aWorld [
 							stepList add: lastStepMessage]].
 			lastStepMessage := nil].
 	lastStepTime := now.
-	ActiveWorld := priorWorld
+	] ensure: [ ActiveWorld := priorWorld ]
 ]
 
 { #category : #stepping }
