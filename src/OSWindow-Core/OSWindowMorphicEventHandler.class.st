@@ -103,14 +103,7 @@ OSWindowMorphicEventHandler >> convertModifiers: modifiers [
 
 { #category : #events }
 OSWindowMorphicEventHandler >> dispatchMorphicEvent: anEvent [
-	morphicWorld defer: [
-				
-		(morphicWorld activeHand isNotNil and: [ anEvent hand isNotNil ]) ifTrue: [
-			morphicWorld activeHand handleEvent: anEvent
-		]
-	].
-	
-	
+	morphicWorld defer: [ morphicWorld dispatchEvent: anEvent ]
 ]
 
 { #category : #events }
@@ -321,12 +314,12 @@ OSWindowMorphicEventHandler >> visitUnknownEvent: anEvent [
 OSWindowMorphicEventHandler >> visitWindowCloseEvent: anEvent [
 	anEvent suppressDefaultAction.
 	
-	self currentWorld defer: [WorldState quitSession].
+	self currentWorld defer: [ morphicWorld windowCloseRequested ].
 ]
 
 { #category : #visiting }
 OSWindowMorphicEventHandler >> visitWindowResizeEvent: anEvent [
 
 	"window resized"
-	morphicWorld worldState worldRenderer checkForNewScreenSize.
+	self currentWorld defer: [ morphicWorld checkForNewScreenSize ]
 ]

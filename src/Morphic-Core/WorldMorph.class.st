@@ -228,6 +228,13 @@ WorldMorph >> canvas [
 	^ worldState canvas
 ]
 
+{ #category : #'event handling' }
+WorldMorph >> checkForNewScreenSize [
+
+	"window resized"
+	self worldState worldRenderer checkForNewScreenSize
+]
+
 { #category : #stepping }
 WorldMorph >> cleanseStepList [
 	"Remove morphs from the step list that are not in this World."
@@ -291,6 +298,16 @@ WorldMorph >> deleteBalloonTarget: aMorph [
 { #category : #'world menu' }
 WorldMorph >> discoveredWorldMenu [
 	^ worldState discoveredWorldMenu
+]
+
+{ #category : #'event handling' }
+WorldMorph >> dispatchEvent: anEvent [
+
+	"Worlds will dispatch events to their children through the active hand.
+	Normal morphs do directly handle the event themselves"
+
+	(self activeHand notNil and: [ anEvent hand isNotNil ])
+		ifTrue: [ self activeHand handleEvent: anEvent ]
 ]
 
 { #category : #accessing }
@@ -620,6 +637,12 @@ WorldMorph >> wantsDroppedMorph: aMorph event: evt [
 { #category : #'menu & halo' }
 WorldMorph >> wantsWindowEvent: anEvent [
 	^ true
+]
+
+{ #category : #'event handling' }
+WorldMorph >> windowCloseRequested [
+
+	WorldState quitSession
 ]
 
 { #category : #structure }
