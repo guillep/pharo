@@ -20,6 +20,12 @@ OSWindowRenderer >> destroy [
 ]
 
 { #category : #'updating screen' }
+OSWindowRenderer >> drawDuring: aBlock [
+
+	self subclassResponsibility
+]
+
+{ #category : #'updating screen' }
 OSWindowRenderer >> exposed [
 	self present
 ]

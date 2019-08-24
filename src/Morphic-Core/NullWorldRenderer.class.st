@@ -5,6 +5,9 @@ I am used when we are in command line or during the initialization
 Class {
 	#name : #NullWorldRenderer,
 	#superclass : #AbstractWorldRenderer,
+	#instVars : [
+		'canvas'
+	],
 	#category : #'Morphic-Core-Worlds'
 }
 
@@ -36,12 +39,13 @@ NullWorldRenderer >> actualScreenSize [
 { #category : #accessing }
 NullWorldRenderer >> canvas [
 
-	^ nil
+	^ canvas
 ]
 
 { #category : #accessing }
-NullWorldRenderer >> canvas: x [ 
+NullWorldRenderer >> canvas: aCanvas [
 
+	canvas := aCanvas
 ]
 
 { #category : #'display box access' }
@@ -61,29 +65,16 @@ NullWorldRenderer >> deferUpdates: aValue [
 	^ aValue value
 ]
 
-{ #category : #operations }
-NullWorldRenderer >> displayWorldState: aWorldState ofWorld: aWorld submorphs: submorphs [
-
-	| canvas worldDamageRects handsToDraw |
-
-	canvas := (Form extent: self actualScreenSize depth: 32) getCanvas.
-
-	submorphs do: [ :m | m fullBounds ].	
-
-	aWorldState checkIfUpdateNeeded ifFalse: [^ self].  
-
-	worldDamageRects := aWorldState drawWorld: aWorld submorphs: submorphs invalidAreasOn: canvas.  
-	"repair world's damage on canvas"
-
-	handsToDraw := aWorldState selectHandsToDrawForDamage: worldDamageRects.
-	handsToDraw reverseDo: [:h | canvas fullDrawMorph: h].  "draw hands onto world canvas"
- 
-	canvas.
-
-]
-
 { #category : #activation }
 NullWorldRenderer >> doActivate [
+]
+
+{ #category : #operations }
+NullWorldRenderer >> drawDuring: aBlock [
+
+	canvas := (Form extent: self actualScreenSize depth: 32) getCanvas.
+	aBlock value: canvas.
+	canvas := nil
 ]
 
 { #category : #operations }
