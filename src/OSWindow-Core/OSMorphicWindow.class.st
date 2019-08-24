@@ -114,6 +114,28 @@ OSMorphicWindow >> close [
 ]
 
 { #category : #events }
+OSMorphicWindow >> createWindow [
+
+	| attributes size |
+	size := root extent.
+	attributes := OSWindowAttributes new.
+	attributes
+		extent: size;
+		title: root asString;
+		windowCentered:true;
+		icon: (self iconNamed: #pharoBig).
+	attributes preferableDriver: OSWindowDriver current.
+
+	osWindow := OSWindow
+		createWithAttributes: attributes
+		eventHandler: (OSWindowMorphicEventHandler for: self).
+	osWindow focus.
+	
+	display := Form extent: size depth: 32.
+	osWindow newFormRenderer: display.
+]
+
+{ #category : #events }
 OSMorphicWindow >> defer: aBlockClosure [ 
 
 	World defer: aBlockClosure
@@ -214,24 +236,7 @@ OSMorphicWindow >> layoutChanged [
 { #category : #events }
 OSMorphicWindow >> open [
 
-	| attributes size |
-	size := root extent.
-	attributes := OSWindowAttributes new.
-	attributes
-		extent: size;
-		title: root asString;
-		windowCentered:true;
-		icon: (self iconNamed: #pharoBig).
-	attributes preferableDriver: OSWindowDriver current.
-
-	osWindow := OSWindow
-		createWithAttributes: attributes
-		eventHandler: (OSWindowMorphicEventHandler for: self).
-	osWindow focus.
-	
-	display := Form extent: size depth: 32.
-	osWindow newFormRenderer: display.
-	
+	self createWindow.
 	WorldMorph addExtraWorld: self
 ]
 
@@ -300,6 +305,7 @@ OSMorphicWindow >> render [
 { #category : #accessing }
 OSMorphicWindow >> restoreMorphicDisplay [ 
 
+	self createWindow.
 	root
 		extent: self actualScreenSize;
 		viewBox: self viewBox;
@@ -309,7 +315,6 @@ OSMorphicWindow >> restoreMorphicDisplay [
 		fullRepaintNeeded.
 			
 	root layoutChanged.
-
 ]
 
 { #category : #accessing }
