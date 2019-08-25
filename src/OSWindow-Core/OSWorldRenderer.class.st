@@ -5,7 +5,6 @@ Class {
 	#name : #OSWorldRenderer,
 	#superclass : #AbstractWorldRenderer,
 	#instVars : [
-		'driver',
 		'osWindow',
 		'display'
 	],
@@ -84,24 +83,22 @@ OSWorldRenderer >> close [
 OSWorldRenderer >> createWindow [
 
 	| attributes initialExtent |
-	
-	initialExtent := world worldState realWindowExtent ifNil: [976@665].
-
+	initialExtent := self initialExtent.
 	attributes := OSWindowAttributes new.
 	attributes
 		extent: initialExtent;
-		title: Smalltalk shortImageName;
+		title: self windowTitle;
 		windowCentered:true;
 		icon: (self iconNamed: #pharoBig).
+	attributes preferableDriver: OSWindowDriver current.
 
+	osWindow := OSWindow
+		createWithAttributes: attributes
+		eventHandler: (OSWindowMorphicEventHandler for: world).
+	osWindow focus.
+	
 	display := Form extent: initialExtent depth: 32.
 	world extent: initialExtent.
-
-	driver := self pickMostSuitableWindowDriver.
-	attributes preferableDriver: driver.
-	osWindow := OSWindow createWithAttributes: attributes eventHandler: (OSWindowMorphicEventHandler for: world).
-	
-	osWindow focus. 
 	
 	world worldState doFullRepaint.
 	world displayWorld.
@@ -140,30 +137,7 @@ OSWorldRenderer >> displayWorldState: aWorldState ofWorld: aWorld submorphs: sub
 { #category : #initialization }
 OSWorldRenderer >> doActivate [
 
-	| attributes initialExtent |
-	
-	initialExtent := world worldState realWindowExtent ifNil: [976@665].
-
-	attributes := OSWindowAttributes new.
-	attributes
-		extent: initialExtent;
-		title: Smalltalk shortImageName;
-		windowCentered:true;
-		icon: (self iconNamed: #pharoBig).
-
-	display := Form extent: initialExtent depth: 32.
-	world extent: initialExtent.
-
-	driver := self pickMostSuitableWindowDriver.
-	attributes preferableDriver: driver.
-	osWindow := OSWindow createWithAttributes: attributes eventHandler: (OSWindowMorphicEventHandler for: world).
-	
-	osWindow focus. 
-	
-	world worldState doFullRepaint.
-	world displayWorld.
-	
-	OSWindowClipboard new beDefault.
+	self createWindow
 ]
 
 { #category : #events }
@@ -178,12 +152,6 @@ OSWorldRenderer >> drawDuring: aBlock [
 	self osWindowRenderer drawDuring: aBlock
 ]
 
-{ #category : #initialization }
-OSWorldRenderer >> driver [
-
-	^ driver
-]
-
 { #category : #operations }
 OSWorldRenderer >> fullscreenMode: aValue [
 
@@ -195,6 +163,12 @@ OSWorldRenderer >> fullscreenMode: aValue [
 OSWorldRenderer >> icon: aForm [ 
 
 	osWindow icon: aForm
+]
+
+{ #category : #initialization }
+OSWorldRenderer >> initialExtent [
+
+	^ world worldState realWindowExtent ifNil: [976@665]
 ]
 
 { #category : #events }
@@ -217,13 +191,6 @@ OSWorldRenderer >> osWindowRenderer [
 	
 ]
 
-{ #category : #initialization }
-OSWorldRenderer >> pickMostSuitableWindowDriver [	
-	driver := OSWindowDriver current.
-	
-	^ driver
-]
-
 { #category : #events }
 OSWorldRenderer >> render [
 
@@ -234,6 +201,12 @@ OSWorldRenderer >> render [
 OSWorldRenderer >> updateAreas: damagedRectangles [
 
 	self osWindowRenderer updateAreas: damagedRectangles immediate: false
+]
+
+{ #category : #initialization }
+OSWorldRenderer >> windowTitle [
+
+	^ Smalltalk shortImageName
 ]
 
 { #category : #initialization }

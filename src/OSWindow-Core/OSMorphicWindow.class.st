@@ -86,28 +86,6 @@ OSMorphicWindow >> checkForNewScreenSize [
 	self render
 ]
 
-{ #category : #events }
-OSMorphicWindow >> createWindow [
-
-	| attributes size |
-	size := world extent.
-	attributes := OSWindowAttributes new.
-	attributes
-		extent: size;
-		title: world asString;
-		windowCentered:true;
-		icon: (self iconNamed: #pharoBig).
-	attributes preferableDriver: OSWindowDriver current.
-
-	osWindow := OSWindow
-		createWithAttributes: attributes
-		eventHandler: (OSWindowMorphicEventHandler for: world).
-	osWindow focus.
-	
-	display := Form extent: size depth: 32.
-	osWindow newFormRenderer: display.
-]
-
 { #category : #compat }
 OSMorphicWindow >> dispatchEvent: anEvent [
 
@@ -164,6 +142,12 @@ OSMorphicWindow >> doActivate [
 ]
 
 { #category : #accessing }
+OSMorphicWindow >> initialExtent [
+
+	^ world extent
+]
+
+{ #category : #accessing }
 OSMorphicWindow >> restoreMorphicDisplay [ 
 
 	osWindow isValid ifFalse: [self createWindow].
@@ -186,4 +170,10 @@ OSMorphicWindow >> root: aMorph [
 	world container: self.
 	"aMorph worldState worldRenderer: self."
 	"aMorph privateOwner: self."
+]
+
+{ #category : #events }
+OSMorphicWindow >> windowTitle [
+
+	^ world asString
 ]

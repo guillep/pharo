@@ -116,7 +116,7 @@ OSWindowWorldMorph >> osWindowRenderer [
 
 { #category : #'session management' }
 OSWindowWorldMorph >> recreateOSWindow [
-	| attributes driver | 
+	| attributes | 
 	attributes := OSWindowAttributes new.
 	attributes
 		extent: self extent;
@@ -124,8 +124,7 @@ OSWindowWorldMorph >> recreateOSWindow [
 		icon: (self iconNamed: #pharoIcon);
 		resizable: isResizeable.
 	self updateDisplay.
-	driver := self pickMostSuitableWindowDriver.
-	attributes preferableDriver: driver.
+	attributes preferableDriver: OSWindowDriver current.
 	osWindow := OSWindow createWithAttributes: attributes eventHandler: (OSWindowMorphicEventHandler for: self)
 ]
 
