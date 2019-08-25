@@ -90,6 +90,12 @@ MorphicRenderer >> isRenderNeededInWorld: aWorld [
 	^false
 ]
 
+{ #category : #drawing }
+MorphicRenderer >> postUpdateMorph: aMorph withDamagedAreas: damagedAreas inCanvas: aCanvas [
+
+	"hook for subclasses"
+]
+
 { #category : #canvas }
 MorphicRenderer >> recordDamagedRect: damageRect [
 

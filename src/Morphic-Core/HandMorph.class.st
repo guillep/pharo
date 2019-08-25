@@ -982,6 +982,14 @@ HandMorph >> pasteBuffer: aMorphOrNil [
 
 ]
 
+{ #category : #drawing }
+HandMorph >> patchExtent [
+
+	savedPatch ifNil: [ ^ 0@0 corner: 0@0 ].
+
+	^ (savedPatch offset extent: savedPatch extent + self shadowOffset)
+]
+
 { #category : #geometry }
 HandMorph >> position [
 

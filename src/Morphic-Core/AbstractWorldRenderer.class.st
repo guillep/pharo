@@ -102,33 +102,24 @@ AbstractWorldRenderer >> deferUpdatesWhile: aBlock [
 AbstractWorldRenderer >> displayWorldState: aWorldState ofWorld: aWorld submorphs: submorphs [
 	"Update this world's display."
 
-	| handsToDraw allDamage |
+	| damagedAreas |
 	submorphs do: [ :m | m fullBounds ].	"force re-layout if needed"
 
 	aWorldState checkIfUpdateNeeded ifFalse: [^ self].  
 	"display is already up-to-date"
 
-	self deferUpdatesWhile: [ | worldDamageRects handDamageRects |
+	self deferUpdatesWhile: [
 		self drawDuring: [ :morphicCanvas |
-			worldDamageRects := aWorldState drawWorld: aWorld submorphs: submorphs invalidAreasOn: morphicCanvas.
+			damagedAreas := self morphicRenderer drawMorph: aWorld inCanvas: morphicCanvas.
+
 			"repair world's damage on canvas"
-
-			handsToDraw := aWorldState selectHandsToDrawForDamage: worldDamageRects.
-			handDamageRects := handsToDraw collect: [ :h | h savePatchFrom: morphicCanvas ].
-			allDamage := worldDamageRects, handDamageRects.
-			handsToDraw reverseDo: [ :h |  morphicCanvas fullDrawMorph: h ]. "draw hands onto world canvas"
-		
-			"*make this true to flash damaged areas for testing*"
-			aWorldState class debugShowDamage
-				ifTrue: [ aWorld flashRects: allDamage color: Color black ].
-
 			morphicCanvas finish.
-		
 			"quickly copy altered rects of canvas to Display:"	
-			self updateAreas: allDamage.
-
-			"restore world canvas under hands"
-			handsToDraw do: [ :h | h restoreSavedPatchOn: morphicCanvas ] ] ]
+			self updateAreas: damagedAreas.
+			self morphicRenderer
+				postUpdateMorph: aWorld
+				withDamagedAreas: damagedAreas
+				inCanvas: morphicCanvas ] ]
 ]
 
 { #category : #activation }

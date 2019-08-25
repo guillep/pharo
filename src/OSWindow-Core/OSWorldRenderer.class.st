@@ -17,6 +17,49 @@ OSWorldRenderer class >> isApplicableFor: aWorld [
 	^ Smalltalk isHeadless and: [ CommandLineArguments new hasOption: 'interactive'  ]
 ]
 
+{ #category : #'instance creation' }
+OSWorldRenderer class >> on: aMorph [
+
+	| newWorld hands |
+	newWorld := WorldMorph new
+		extent: aMorph extent;
+		layoutPolicy: ProportionalLayout new;
+		clipSubmorphs: true;
+		color: Color transparent;
+		borderWidth: 0.
+
+	aMorph
+		hResizing: #spaceFill;
+		vResizing: #spaceFill.
+	aMorph openInWorld: newWorld.
+
+	hands := HandMorph new.
+	newWorld addHand: hands.
+	newWorld activeHand: hands.
+
+	^ self onWorld: newWorld
+]
+
+{ #category : #'instance creation' }
+OSWorldRenderer class >> onWorld: aWorldMorph [
+
+	^ self new
+		world: aWorldMorph;
+		yourself
+]
+
+{ #category : #'instance creation' }
+OSWorldRenderer class >> openOn: aMorph [
+
+	(self on: aMorph) open
+]
+
+{ #category : #'instance creation' }
+OSWorldRenderer class >> openOnWorld: aWorld [
+
+	(self onWorld: aWorld) open
+]
+
 { #category : #accessing }
 OSWorldRenderer class >> priority [ 
 
@@ -127,6 +170,32 @@ OSWorldRenderer >> deferUpdatesWhile: aBlock [
 		super deferUpdatesWhile: aBlock ]
 ]
 
+{ #category : #events }
+OSWorldRenderer >> dispatchEvent: anEvent [
+
+	world dispatchEvent: anEvent
+]
+
+{ #category : #accessing }
+OSWorldRenderer >> displayMorph: aMorph [
+	"Update this world's display."
+
+	| allDamage |
+	aMorph submorphs do: [ :m | m fullBounds ].	"force re-layout if needed"
+
+	self morphicRenderer updateIsNeeded ifFalse: [^ self].  
+	"display is already up-to-date"
+	
+	self deferUpdatesWhile: [
+		self drawDuring: [ :morphicCanvas |
+			allDamage := self morphicRenderer drawMorph: aMorph inCanvas: morphicCanvas.
+
+			"repair world's damage on canvas"
+			morphicCanvas finish.
+			"quickly copy altered rects of canvas to Display:"	
+			self updateAreas: allDamage ] ]
+]
+
 { #category : #operations }
 OSWorldRenderer >> displayWorldState: aWorldState ofWorld: aWorld submorphs: submorphs [
 
@@ -212,5 +281,6 @@ OSWorldRenderer >> windowTitle [
 { #category : #initialization }
 OSWorldRenderer >> world: aWorld [
 
-	world := aWorld
+	world := aWorld.
+	world container: self.
 ]
