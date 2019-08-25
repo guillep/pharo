@@ -95,7 +95,7 @@ RBMethodNodeTest >> testNodeForOffsetTempDefinition [
 	self assert: (foundNode class == RBVariableNode).
 ]
 
-{ #category : #tests }
+{ #category : #'testing-comments' }
 RBMethodNodeTest >> testNodeForOffsetVar [
 	"test the case of a variable"
 	| source ast foundNode |

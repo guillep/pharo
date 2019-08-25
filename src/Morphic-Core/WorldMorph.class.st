@@ -7,6 +7,9 @@ A World, the entire Smalltalk screen, is a PasteUpMorph.  A World responds true 
 Class {
 	#name : #WorldMorph,
 	#superclass : #PasteUpMorph,
+	#instVars : [
+		'container'
+	],
 	#classVars : [
 		'AllowDropFiles',
 		'CursorOwnerWorld',
@@ -242,6 +245,16 @@ WorldMorph >> cleanseStepList [
 	worldState cleanseStepListForWorld: self
 ]
 
+{ #category : #accessing }
+WorldMorph >> container [
+	^ container
+]
+
+{ #category : #accessing }
+WorldMorph >> container: anObject [
+	container := anObject
+]
+
 { #category : #'menu & halo' }
 WorldMorph >> contentsMenu: aMenu [
 	"Build the menu used from PopUpContentsMenu:"
@@ -423,7 +436,7 @@ WorldMorph >> invalidRect: damageRect from: aMorph [
 	| rectangle |
 	rectangle := damageRect intersect: self bounds ifNone: [ ^ self ].
 
-	owner ifNotNil: [ owner invalidRect: rectangle from: self ].
+	container ifNotNil: [ container invalidRect: rectangle from: self ].
 	worldState recordDamagedRect: rectangle
 ]
 

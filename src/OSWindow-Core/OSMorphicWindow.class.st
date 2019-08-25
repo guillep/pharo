@@ -19,17 +19,15 @@ OSMorphicWindow openOnWorld: world.
 
 Or on a single morph like this too:
 
-OSMorphicWindow openOnWorld: ClyFullBrowser onDefaultEnvironment.
+OSMorphicWindow openOn: ClyFullBrowser onDefaultEnvironment.
 "
 Class {
 	#name : #OSMorphicWindow,
-	#superclass : #Object,
+	#superclass : #AbstractWorldRenderer,
 	#instVars : [
-		'root',
 		'osWindow',
 		'display',
-		'kmDispatcher',
-		'renderer'
+		'kmDispatcher'
 	],
 	#category : #'OSWindow-Core-Morphic'
 }
@@ -85,20 +83,14 @@ OSMorphicWindow >> activate [
 
 { #category : #compat }
 OSMorphicWindow >> activeHand [
-	
-	 ^ root activeHand
+	"this is required because Morphic's ui process asks for it to set the ActiveHand global"
+	^ world activeHand
 ]
 
 { #category : #accessing }
 OSMorphicWindow >> actualScreenSize [
 
 	^ osWindow ifNil: [ 240@120 ] ifNotNil: [ osWindow extent ]
-]
-
-{ #category : #compat }
-OSMorphicWindow >> beCursorOwner [
-	
-	"nothing?"
 ]
 
 { #category : #events }
@@ -116,8 +108,8 @@ OSMorphicWindow >> checkForNewScreenSize [
 	display := Form extent: self actualScreenSize depth: 32.
 	osWindow renderer form: display.
 
-	root worldState realWindowExtent: self actualScreenSize.
-	root submorphs do: [ :e | e extent: self actualScreenSize ].
+	world worldState realWindowExtent: self actualScreenSize.
+	world submorphs do: [ :e | e extent: self actualScreenSize ].
 	self restoreMorphicDisplay.
 	"force render"
 	self render
@@ -134,18 +126,18 @@ OSMorphicWindow >> close [
 OSMorphicWindow >> createWindow [
 
 	| attributes size |
-	size := root extent.
+	size := world extent.
 	attributes := OSWindowAttributes new.
 	attributes
 		extent: size;
-		title: root asString;
+		title: world asString;
 		windowCentered:true;
 		icon: (self iconNamed: #pharoBig).
 	attributes preferableDriver: OSWindowDriver current.
 
 	osWindow := OSWindow
 		createWithAttributes: attributes
-		eventHandler: (OSWindowMorphicEventHandler for: self).
+		eventHandler: (OSWindowMorphicEventHandler for: world).
 	osWindow focus.
 	
 	display := Form extent: size depth: 32.
@@ -155,7 +147,7 @@ OSMorphicWindow >> createWindow [
 { #category : #events }
 OSMorphicWindow >> defer: aBlockClosure [ 
 
-	World defer: aBlockClosure
+	world defer: aBlockClosure
 ]
 
 { #category : #accessing }
@@ -167,7 +159,7 @@ OSMorphicWindow >> deferUpdatesWhile: aBlock [
 { #category : #compat }
 OSMorphicWindow >> dispatchEvent: anEvent [
 
-	root dispatchEvent: anEvent
+	world dispatchEvent: anEvent
 ]
 
 { #category : #accessing }
@@ -226,45 +218,9 @@ OSMorphicWindow >> drawDuring: aBlock [
 ]
 
 { #category : #compat }
-OSMorphicWindow >> handleEvent: anEvent [
-
-	root handleEvent: anEvent
-]
-
-{ #category : #'compat hand' }
-OSMorphicWindow >> hasSubmorphs [
-
-	^ false
-]
-
-{ #category : #compat }
 OSMorphicWindow >> invalidRect: aRectangle from: aClyFullBrowser [ 
 	osWindow isValid ifFalse: [ ^ self ].
-	self morphicRenderer recordDamagedRect: (aRectangle intersect: self viewBox ifNone: [ ^ self ])
-]
-
-{ #category : #accessing }
-OSMorphicWindow >> kmDispatcher [
-	
-	^ kmDispatcher ifNil: [ 
-		kmDispatcher := KMDispatcher target: self.
-		"self initializeShortcuts: kmDispatcher".
-		kmDispatcher ]
-]
-
-{ #category : #compat }
-OSMorphicWindow >> layoutChanged [
-
-	"nothing"
-]
-
-{ #category : #accessing }
-OSMorphicWindow >> morphicRenderer [
-
-	^ renderer ifNil: [
-		renderer := root newRenderer
-			doFullRepaint;
-			yourself ]
+	super invalidRect: aRectangle from: aClyFullBrowser
 ]
 
 { #category : #events }
@@ -280,64 +236,12 @@ OSMorphicWindow >> owner [
 	^ nil
 ]
 
-{ #category : #accessing }
-OSMorphicWindow >> paneColorOrNil [
-	
-	^nil
-]
-
-{ #category : #'compat hand' }
-OSMorphicWindow >> position [
-	
-	^ 0 @ 0
-]
-
-{ #category : #compat }
-OSMorphicWindow >> recordDamagedRect: aRectangle [
-	
-	self morphicRenderer recordDamagedRect: aRectangle
-]
-
-{ #category : #focus }
-OSMorphicWindow >> releaseKeyboardFocus: aMorph [
-
-	self releaseMouseFocus: aMorph
-]
-
-{ #category : #asd }
-OSMorphicWindow >> releaseMouseFocus: aLabelMorph [ 
-
-	"nothing"
-]
-
-{ #category : #compat }
-OSMorphicWindow >> removeAlarm: aString for: aRubCursor [ 
-	"nothing"
-]
-
-{ #category : #compat }
-OSMorphicWindow >> removeHaloAround: aTabMorph [ 
-	"nothing"
-]
-
-{ #category : #'compat hand' }
-OSMorphicWindow >> removeHaloFromClick: aMouseButtonEvent on: aClyFullBrowser [ 
-	
-	"nothing"
-]
-
-{ #category : #'compat hand' }
-OSMorphicWindow >> removePendingBalloonFor: aClyFullBrowser [ 
-	
-	"nothing"
-]
-
 { #category : #events }
 OSMorphicWindow >> render [
 
 	osWindow isValid ifFalse: [ ^ self ].
 
-	self displayMorph: root.
+	self displayMorph: world.
 	osWindow renderer updateAll.
 ]
 
@@ -345,7 +249,7 @@ OSMorphicWindow >> render [
 OSMorphicWindow >> restoreMorphicDisplay [ 
 
 	osWindow isValid ifFalse: [self createWindow].
-	root
+	world
 		extent: self actualScreenSize;
 		viewBox: self viewBox;
 		handsDo: [:h | h visible: true; showTemporaryCursor: nil];
@@ -354,46 +258,16 @@ OSMorphicWindow >> restoreMorphicDisplay [
 		fullRepaintNeeded.
 			
 	self morphicRenderer doFullRepaint.
-	root layoutChanged.
+	world layoutChanged.
 ]
 
 { #category : #accessing }
 OSMorphicWindow >> root: aMorph [
 
-	root := aMorph.
+	world := aMorph.
+	world container: self.
 	"aMorph worldState worldRenderer: self."
-	aMorph privateOwner: self.
-]
-
-{ #category : #compat }
-OSMorphicWindow >> startStepping: aTabBuildingIconMorph [ 
-	
-	"nothing"
-]
-
-{ #category : #'compat hand' }
-OSMorphicWindow >> stopStepping: aFTTableMorph selector: aString [ 
-	
-	"nothng"
-]
-
-{ #category : #'compat hand' }
-OSMorphicWindow >> submorphs [
-
-	^ #()
-]
-
-{ #category : #compat }
-OSMorphicWindow >> theme [
-	^ Smalltalk ui theme
-]
-
-{ #category : #accessing }
-OSMorphicWindow >> transformFrom: uberMorph [ 
-	"Return a transform to be used to map coordinates in a morph above me into my childrens coordinates, or vice-versa. This is used to support scrolling, scaling, and/or rotation. This default implementation just returns my owner's transform or the identity transform if my owner is nil. 
-	Note:  This method cannot be used to map into the receiver's coordinate system!"
-
-	^IdentityTransform new
+	"aMorph privateOwner: self."
 ]
 
 { #category : #accessing }
@@ -402,47 +276,13 @@ OSMorphicWindow >> updateAreas: damagedRectangles [
 	osWindow renderer updateAreas: damagedRectangles immediate: false
 ]
 
-{ #category : #accessing }
-OSMorphicWindow >> usableArea [
-
-	^ self viewBox
-]
-
-{ #category : #accessing }
-OSMorphicWindow >> viewBox [
-
-	^ 0@0 corner: self actualScreenSize
-]
-
-{ #category : #'compat hand' }
-OSMorphicWindow >> waitForClicksOrDrag: aMorph event: evt [
-	"Wait for mouse button and movement events, informing aMorph about events interesting to it via callbacks.
-	This message is typically sent to the Hand by aMorph when it first receives a mouse-down event.
-	The callback methods invoked on aMorph (which are passed a copy of evt) are:
-		#click:	sent when the mouse button goes up within doubleClickTime.
-		#doubleClick:	sent when the mouse goes up, down, and up again all within DoubleClickTime.
-		#doubleClickTimeout:  sent when the mouse does not have a doubleClick within DoubleClickTime.
-		#startDrag:	sent when the mouse moves more than 10 pixels from evt's position within DoubleClickTime.
-	Note that mouseMove: and mouseUp: events are not sent to aMorph until it becomes the mouse focus,
-	which is typically done by aMorph in its click:, doubleClick:, or drag: methods."
-	
-	^self waitForClicksOrDrag: aMorph event: evt selectors: #( #click: #doubleClick: #doubleClickTimeout: #startDrag:) threshold: 10
-
-]
-
 { #category : #events }
 OSMorphicWindow >> windowCloseRequested [
 	
 	self close
 ]
 
-{ #category : #iterating }
-OSMorphicWindow >> withAllOwnersDo: aBlock [
-	"Evaluate aBlock with the receiver and all of its owners"
-	aBlock value: self.
-]
-
 { #category : #accessing }
 OSMorphicWindow >> world [
-	^ World
+	^ world
 ]

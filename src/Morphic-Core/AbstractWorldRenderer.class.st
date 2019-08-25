@@ -164,7 +164,10 @@ AbstractWorldRenderer >> invalidRect: aRectangle from: aMorph [
 { #category : #rendering }
 AbstractWorldRenderer >> morphicRenderer [
 
-	^ renderer ifNil: [ renderer := MorphicRenderer new ]
+	^ renderer ifNil: [
+		renderer := world newRenderer
+			doFullRepaint;
+			yourself ]
 ]
 
 { #category : #rendering }
