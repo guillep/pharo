@@ -30,6 +30,12 @@ OSWorldRenderer >> activateCursor: aCursor withMask: maskForm [
 	osWindow ifNotNil: [ osWindow setMouseCursor: aCursor mask: maskForm ]
 ]
 
+{ #category : #compat }
+OSWorldRenderer >> activeHand [
+	"this is required because Morphic's ui process asks for it to set the ActiveHand global"
+	^ world activeHand
+]
+
 { #category : #initialization }
 OSWorldRenderer >> actualScreenSize [
 
@@ -37,7 +43,7 @@ OSWorldRenderer >> actualScreenSize [
 ]
 
 { #category : #'as yet unclassified' }
-OSWorldRenderer >> canvas: x [
+OSWorldRenderer >> canvas: aCanvas [
 
 	"should stay here for the moment. It's called by WorldMorph >> extent: but doing nothing"
 ]
@@ -65,6 +71,42 @@ OSWorldRenderer >> clipboardText [
 { #category : #initialization }
 OSWorldRenderer >> clipboardText: aString [
 	osWindow clipboardText: aString asString
+]
+
+{ #category : #events }
+OSWorldRenderer >> close [
+
+	osWindow destroy.
+	WorldMorph removeExtraWorld: self
+]
+
+{ #category : #initialization }
+OSWorldRenderer >> createWindow [
+
+	| attributes initialExtent |
+	
+	initialExtent := world worldState realWindowExtent ifNil: [976@665].
+
+	attributes := OSWindowAttributes new.
+	attributes
+		extent: initialExtent;
+		title: Smalltalk shortImageName;
+		windowCentered:true;
+		icon: (self iconNamed: #pharoBig).
+
+	display := Form extent: initialExtent depth: 32.
+	world extent: initialExtent.
+
+	driver := self pickMostSuitableWindowDriver.
+	attributes preferableDriver: driver.
+	osWindow := OSWindow createWithAttributes: attributes eventHandler: (OSWindowMorphicEventHandler for: world).
+	
+	osWindow focus. 
+	
+	world worldState doFullRepaint.
+	world displayWorld.
+	
+	OSWindowClipboard new beDefault.
 ]
 
 { #category : #initialization }
@@ -124,6 +166,12 @@ OSWorldRenderer >> doActivate [
 	OSWindowClipboard new beDefault.
 ]
 
+{ #category : #events }
+OSWorldRenderer >> doOneCycle [
+
+	self render
+]
+
 { #category : #initialization }
 OSWorldRenderer >> drawDuring: aBlock [
 
@@ -149,6 +197,16 @@ OSWorldRenderer >> icon: aForm [
 	osWindow icon: aForm
 ]
 
+{ #category : #events }
+OSWorldRenderer >> open [
+
+	self createWindow.
+	world windowEventHandler: (OSMorphicWindowEventHandler new
+		osMorphicWindow: self;
+		yourself).
+	WorldMorph addExtraWorld: self
+]
+
 { #category : #initialization }
 OSWorldRenderer >> osWindowRenderer [
 		
@@ -164,6 +222,12 @@ OSWorldRenderer >> pickMostSuitableWindowDriver [
 	driver := OSWindowDriver current.
 	
 	^ driver
+]
+
+{ #category : #events }
+OSWorldRenderer >> render [
+
+	self displayMorph: world
 ]
 
 { #category : #operations }

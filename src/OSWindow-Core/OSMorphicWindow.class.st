@@ -70,30 +70,6 @@ OSMorphicWindow class >> openOnWorld: aWorld [
 	(self onWorld: aWorld) open
 ]
 
-{ #category : #compat }
-OSMorphicWindow >> activate [
-
-	"nothing for now"
-]
-
-{ #category : #compat }
-OSMorphicWindow >> activeHand [
-	"this is required because Morphic's ui process asks for it to set the ActiveHand global"
-	^ world activeHand
-]
-
-{ #category : #accessing }
-OSMorphicWindow >> actualScreenSize [
-
-	^ osWindow ifNil: [ 240@120 ] ifNotNil: [ osWindow extent ]
-]
-
-{ #category : #events }
-OSMorphicWindow >> canvas: aCanvas [
-
-	"should stay here for the moment. It's called by WorldMorph >> extent: but doing nothing"
-]
-
 { #category : #events }
 OSMorphicWindow >> checkForNewScreenSize [
 
@@ -108,13 +84,6 @@ OSMorphicWindow >> checkForNewScreenSize [
 	self restoreMorphicDisplay.
 	"force render"
 	self render
-]
-
-{ #category : #events }
-OSMorphicWindow >> close [
-
-	osWindow destroy.
-	WorldMorph removeExtraWorld: self
 ]
 
 { #category : #events }
@@ -137,12 +106,6 @@ OSMorphicWindow >> createWindow [
 	
 	display := Form extent: size depth: 32.
 	osWindow newFormRenderer: display.
-]
-
-{ #category : #events }
-OSMorphicWindow >> defer: aBlockClosure [ 
-
-	world defer: aBlockClosure
 ]
 
 { #category : #accessing }
@@ -197,50 +160,13 @@ OSMorphicWindow >> displayWorldState: aWorldState ofWorld: aWorld submorphs: sub
 			self updateAreas: allDamage ] ]
 ]
 
-{ #category : #events }
-OSMorphicWindow >> doOneCycle [
-
-	self render
-]
-
-{ #category : #events }
-OSMorphicWindow >> drawDuring: aBlock [
-
-	osWindow isValid ifFalse: [ ^ self ].
-
-	osWindow renderer drawDuring: aBlock.
-	osWindow renderer updateAll.
-]
-
 { #category : #compat }
-OSMorphicWindow >> invalidRect: aRectangle from: aClyFullBrowser [ 
-	osWindow isValid ifFalse: [ ^ self ].
-	super invalidRect: aRectangle from: aClyFullBrowser
-]
+OSMorphicWindow >> doActivate [
 
-{ #category : #events }
-OSMorphicWindow >> open [
+	(osWindow notNil and: [ osWindow isValid ])
+		ifTrue: [ ^ self ].
 
-	self createWindow.
-	world windowEventHandler: (OSMorphicWindowEventHandler new
-		osMorphicWindow: self;
-		yourself).
-	WorldMorph addExtraWorld: self
-]
-
-{ #category : #compat }
-OSMorphicWindow >> owner [
-	
-	^ nil
-]
-
-{ #category : #events }
-OSMorphicWindow >> render [
-
-	osWindow isValid ifFalse: [ ^ self ].
-
-	self displayMorph: world.
-	osWindow renderer updateAll.
+	self open
 ]
 
 { #category : #accessing }
@@ -266,15 +192,4 @@ OSMorphicWindow >> root: aMorph [
 	world container: self.
 	"aMorph worldState worldRenderer: self."
 	"aMorph privateOwner: self."
-]
-
-{ #category : #accessing }
-OSMorphicWindow >> updateAreas: damagedRectangles [
-
-	osWindow renderer updateAreas: damagedRectangles immediate: false
-]
-
-{ #category : #accessing }
-OSMorphicWindow >> world [
-	^ world
 ]
