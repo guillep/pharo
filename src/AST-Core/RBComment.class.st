@@ -56,7 +56,7 @@ RBComment >> contents [
 	^ contents
 ]
 
-{ #category : #printing }
+{ #category : #testing }
 RBComment >> intersectsInterval: anInterval [ 
 	"Make comments polymorphic with program nodes for hit detection"
 	
