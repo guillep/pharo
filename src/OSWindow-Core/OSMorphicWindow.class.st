@@ -108,12 +108,6 @@ OSMorphicWindow >> createWindow [
 	osWindow newFormRenderer: display.
 ]
 
-{ #category : #accessing }
-OSMorphicWindow >> deferUpdatesWhile: aBlock [
-
-	aBlock value
-]
-
 { #category : #compat }
 OSMorphicWindow >> dispatchEvent: anEvent [
 
