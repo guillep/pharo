@@ -227,6 +227,9 @@ OSMorphicWindow >> invalidRect: aRectangle from: aClyFullBrowser [
 OSMorphicWindow >> open [
 
 	self createWindow.
+	world windowEventHandler: (OSMorphicWindowEventHandler new
+		osMorphicWindow: self;
+		yourself).
 	WorldMorph addExtraWorld: self
 ]
 
@@ -274,12 +277,6 @@ OSMorphicWindow >> root: aMorph [
 OSMorphicWindow >> updateAreas: damagedRectangles [
 
 	osWindow renderer updateAreas: damagedRectangles immediate: false
-]
-
-{ #category : #events }
-OSMorphicWindow >> windowCloseRequested [
-	
-	self close
 ]
 
 { #category : #accessing }

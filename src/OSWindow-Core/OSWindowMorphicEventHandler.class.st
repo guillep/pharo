@@ -103,6 +103,7 @@ OSWindowMorphicEventHandler >> convertModifiers: modifiers [
 
 { #category : #events }
 OSWindowMorphicEventHandler >> dispatchMorphicEvent: anEvent [
+
 	morphicWorld defer: [ morphicWorld dispatchEvent: anEvent ]
 ]
 
@@ -314,7 +315,10 @@ OSWindowMorphicEventHandler >> visitUnknownEvent: anEvent [
 OSWindowMorphicEventHandler >> visitWindowCloseEvent: anEvent [
 	anEvent suppressDefaultAction.
 	
-	self currentWorld defer: [ morphicWorld windowCloseRequested ].
+	^ WindowEvent new
+		setTimeStamp: Time millisecondClockValue;
+		setHand: self activeHand;
+		action: 2 "#windowClose"
 ]
 
 { #category : #visiting }

@@ -14,12 +14,12 @@ Class {
 	#instVars : [
 		'backgroundMorph',
 		'worldState',
-		'griddingOn'
+		'griddingOn',
+		'windowEventHandler'
 	],
 	#classVars : [
 		'ShouldShowWorldMenu',
 		'ShouldSwapMenuOpenerButtons',
-		'WindowEventHandler',
 		'WorldAnnouncer'
 	],
 	#category : #'Morphic-Core-Worlds'
@@ -1046,13 +1046,13 @@ PasteUpMorph >> windowEvent: anEvent [
 { #category : #'event handling' }
 PasteUpMorph >> windowEventHandler [
 	"This is a class variable so it is global to all projects and does not get saved"
-	^WindowEventHandler
+	^windowEventHandler
 ]
 
 { #category : #'event handling' }
 PasteUpMorph >> windowEventHandler: anObject [
 	"This is a class variable so it is global to all projects and does not get saved"
-	WindowEventHandler := anObject
+	windowEventHandler := anObject
 
 ]
 
