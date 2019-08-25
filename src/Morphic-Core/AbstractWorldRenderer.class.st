@@ -158,7 +158,7 @@ AbstractWorldRenderer >> initialize [
 { #category : #rendering }
 AbstractWorldRenderer >> invalidRect: aRectangle from: aMorph [
 
-	self morphicRenderer recordDamagedRect: (aRectangle intersect: self actualScreenSize ifNone: [ ^ self ])
+	self morphicRenderer recordDamagedRect: (aRectangle intersect: self viewBox ifNone: [ ^ self ])
 ]
 
 { #category : #rendering }

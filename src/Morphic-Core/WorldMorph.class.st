@@ -420,7 +420,11 @@ WorldMorph >> initialize [
 WorldMorph >> invalidRect: damageRect from: aMorph [
 	"Clip damage reports to my bounds, since drawing is clipped to my bounds."
 
-	worldState recordDamagedRect: (damageRect intersect: self bounds ifNone: [ ^ self ])
+	| rectangle |
+	rectangle := damageRect intersect: self bounds ifNone: [ ^ self ].
+
+	owner ifNotNil: [ owner invalidRect: rectangle from: self ].
+	worldState recordDamagedRect: rectangle
 ]
 
 { #category : #cursor }

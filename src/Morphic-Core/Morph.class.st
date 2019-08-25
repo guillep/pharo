@@ -2183,7 +2183,7 @@ Morph >> dispatchEvent: anEvent [
 	"For polymorphism with worlds.
 	Worlds will dispatch events to their children through the hands.
 	Normal morphs do directly handle the event themselves"
-	self handleEvent: anEvent
+	self processEvent: anEvent
 ]
 
 { #category : #'change reporting' }

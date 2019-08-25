@@ -6,6 +6,20 @@ Use me with:
 
 I create a new os window, and a new world inside it to contain the morph.
 I subscribe myself to morphic's extraWorldList (see WorldMorph class side) to refresh myself on Morphic's ui process.
+
+I can be used to open a full new world like this:
+
+world := WorldMorph new.
+hand := HandMorph new.
+world addHand: hand.
+world activeHand: hand.
+world extent: 800@600.
+
+OSMorphicWindow openOnWorld: world.
+
+Or on a single morph like this too:
+
+OSMorphicWindow openOnWorld: ClyFullBrowser onDefaultEnvironment.
 "
 Class {
 	#name : #OSMorphicWindow,
@@ -165,7 +179,7 @@ OSMorphicWindow >> displayMorph: aMorph [
 
 	self morphicRenderer updateIsNeeded ifFalse: [^ self].  
 	"display is already up-to-date"
-
+	
 	self deferUpdatesWhile: [
 		self drawDuring: [ :morphicCanvas |
 			allDamage := self morphicRenderer drawMorph: aMorph inCanvas: morphicCanvas.
@@ -225,8 +239,8 @@ OSMorphicWindow >> hasSubmorphs [
 
 { #category : #compat }
 OSMorphicWindow >> invalidRect: aRectangle from: aClyFullBrowser [ 
-	
-	self morphicRenderer recordDamagedRect: (aRectangle intersect: self actualScreenSize ifNone: [ ^ self ])
+	osWindow isValid ifFalse: [ ^ self ].
+	self morphicRenderer recordDamagedRect: (aRectangle intersect: self viewBox ifNone: [ ^ self ])
 ]
 
 { #category : #accessing }
@@ -324,8 +338,6 @@ OSMorphicWindow >> render [
 	osWindow isValid ifFalse: [ ^ self ].
 
 	self displayMorph: root.
-	"osWindow renderer getCanvas fullDraw: root."
-	"osWindow renderer getCanvas finish."
 	osWindow renderer updateAll.
 ]
 
@@ -432,5 +444,5 @@ OSMorphicWindow >> withAllOwnersDo: aBlock [
 
 { #category : #accessing }
 OSMorphicWindow >> world [
-	^ self
+	^ World
 ]
