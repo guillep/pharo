@@ -728,9 +728,9 @@ WorldState >> realWindowExtent: aValue [
 
 { #category : #canvas }
 WorldState >> recordDamagedRect: damageRect [
-
-	damageRecorder ifNotNil: [damageRecorder recordInvalidRect: damageRect truncated]
-
+	
+	damageRecorder ifNotNil: [damageRecorder recordInvalidRect: damageRect truncated].
+	self worldRenderer recordDamagedRect: damageRect
 ]
 
 { #category : #alarms }

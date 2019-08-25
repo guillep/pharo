@@ -4445,6 +4445,12 @@ Morph >> nearestOwnerThat: conditionBlock [
 
 ]
 
+{ #category : #'instance creation' }
+Morph >> newRenderer [
+
+	^ MorphicRenderer new
+]
+
 { #category : #'halos and balloon help' }
 Morph >> noHelpString [
 	^ 'Help not yet supplied' translated

@@ -7,7 +7,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'world',
-		'alreadyActivated'
+		'alreadyActivated',
+		'renderer'
 	],
 	#classVars : [
 		'MainWorldRenderer'
@@ -152,6 +153,24 @@ AbstractWorldRenderer >> icon: aForm [
 AbstractWorldRenderer >> initialize [
 
 	alreadyActivated := false
+]
+
+{ #category : #rendering }
+AbstractWorldRenderer >> invalidRect: aRectangle from: aMorph [
+
+	self morphicRenderer recordDamagedRect: (aRectangle intersect: self actualScreenSize ifNone: [ ^ self ])
+]
+
+{ #category : #rendering }
+AbstractWorldRenderer >> morphicRenderer [
+
+	^ renderer ifNil: [ renderer := MorphicRenderer new ]
+]
+
+{ #category : #rendering }
+AbstractWorldRenderer >> recordDamagedRect: damageRect [
+
+	self morphicRenderer recordDamagedRect: damageRect
 ]
 
 { #category : #operations }

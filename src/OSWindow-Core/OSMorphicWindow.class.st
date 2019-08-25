@@ -14,7 +14,8 @@ Class {
 		'root',
 		'osWindow',
 		'display',
-		'kmDispatcher'
+		'kmDispatcher',
+		'renderer'
 	],
 	#category : #'OSWindow-Core-Morphic'
 }
@@ -156,36 +157,43 @@ OSMorphicWindow >> dispatchEvent: anEvent [
 ]
 
 { #category : #accessing }
+OSMorphicWindow >> displayMorph: aMorph [
+	"Update this world's display."
+
+	| allDamage |
+	aMorph submorphs do: [ :m | m fullBounds ].	"force re-layout if needed"
+
+	self morphicRenderer updateIsNeeded ifFalse: [^ self].  
+	"display is already up-to-date"
+
+	self deferUpdatesWhile: [
+		self drawDuring: [ :morphicCanvas |
+			allDamage := self morphicRenderer drawMorph: aMorph inCanvas: morphicCanvas.
+
+			"repair world's damage on canvas"
+			morphicCanvas finish.
+			"quickly copy altered rects of canvas to Display:"	
+			self updateAreas: allDamage ] ]
+]
+
+{ #category : #accessing }
 OSMorphicWindow >> displayWorldState: aWorldState ofWorld: aWorld submorphs: submorphs [
 	"Update this world's display."
 
-	| handsToDraw allDamage |
+	| allDamage |
 	submorphs do: [ :m | m fullBounds ].	"force re-layout if needed"
 
 	aWorldState checkIfUpdateNeeded ifFalse: [^ self].  
 	"display is already up-to-date"
 
-	self deferUpdatesWhile: [ | worldDamageRects handDamageRects |
+	self deferUpdatesWhile: [
 		self drawDuring: [ :morphicCanvas |
-			worldDamageRects := aWorldState drawWorld: aWorld submorphs: submorphs invalidAreasOn: morphicCanvas.
+			allDamage := self morphicRenderer drawMorph: aWorld inCanvas: morphicCanvas.
+
 			"repair world's damage on canvas"
-
-			handsToDraw := aWorldState selectHandsToDrawForDamage: worldDamageRects.
-			handDamageRects := handsToDraw collect: [ :h | h savePatchFrom: morphicCanvas ].
-			allDamage := worldDamageRects, handDamageRects.
-			handsToDraw reverseDo: [ :h |  morphicCanvas fullDrawMorph: h ]. "draw hands onto world canvas"
-		
-			"*make this true to flash damaged areas for testing*"
-			aWorldState class debugShowDamage
-				ifTrue: [ aWorld flashRects: allDamage color: Color black ].
-
 			morphicCanvas finish.
-		
 			"quickly copy altered rects of canvas to Display:"	
-			self updateAreas: allDamage.
-
-			"restore world canvas under hands"
-			handsToDraw do: [ :h | h restoreSavedPatchOn: morphicCanvas ] ] ]
+			self updateAreas: allDamage ] ]
 ]
 
 { #category : #events }
@@ -217,7 +225,8 @@ OSMorphicWindow >> hasSubmorphs [
 
 { #category : #compat }
 OSMorphicWindow >> invalidRect: aRectangle from: aClyFullBrowser [ 
-	"nothing"
+	
+	self morphicRenderer recordDamagedRect: (aRectangle intersect: self actualScreenSize ifNone: [ ^ self ])
 ]
 
 { #category : #accessing }
@@ -233,6 +242,15 @@ OSMorphicWindow >> kmDispatcher [
 OSMorphicWindow >> layoutChanged [
 
 	"nothing"
+]
+
+{ #category : #accessing }
+OSMorphicWindow >> morphicRenderer [
+
+	^ renderer ifNil: [
+		renderer := root newRenderer
+			doFullRepaint;
+			yourself ]
 ]
 
 { #category : #events }
@@ -258,6 +276,12 @@ OSMorphicWindow >> paneColorOrNil [
 OSMorphicWindow >> position [
 	
 	^ 0 @ 0
+]
+
+{ #category : #compat }
+OSMorphicWindow >> recordDamagedRect: aRectangle [
+	
+	self morphicRenderer recordDamagedRect: aRectangle
 ]
 
 { #category : #focus }
@@ -299,7 +323,8 @@ OSMorphicWindow >> render [
 
 	osWindow isValid ifFalse: [ ^ self ].
 
-	osWindow renderer getCanvas fullDraw: root.
+	self displayMorph: root.
+	"osWindow renderer getCanvas fullDraw: root."
 	"osWindow renderer getCanvas finish."
 	osWindow renderer updateAll.
 ]
@@ -316,6 +341,7 @@ OSMorphicWindow >> restoreMorphicDisplay [
 		submorphsDo: [ :each | each displayExtentChanged ];
 		fullRepaintNeeded.
 			
+	self morphicRenderer doFullRepaint.
 	root layoutChanged.
 ]
 
@@ -323,7 +349,7 @@ OSMorphicWindow >> restoreMorphicDisplay [
 OSMorphicWindow >> root: aMorph [
 
 	root := aMorph.
-	aMorph worldState worldRenderer: self.
+	"aMorph worldState worldRenderer: self."
 	aMorph privateOwner: self.
 ]
 
@@ -356,6 +382,12 @@ OSMorphicWindow >> transformFrom: uberMorph [
 	Note:  This method cannot be used to map into the receiver's coordinate system!"
 
 	^IdentityTransform new
+]
+
+{ #category : #accessing }
+OSMorphicWindow >> updateAreas: damagedRectangles [
+
+	osWindow renderer updateAreas: damagedRectangles immediate: false
 ]
 
 { #category : #accessing }

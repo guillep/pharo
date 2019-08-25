@@ -474,6 +474,12 @@ WorldMorph >> mouseDown: evt [
 	self currentWindow ifNotNil: [ :topWindow | SystemWindow passivateTopWindow ]
 ]
 
+{ #category : #'instance creation' }
+WorldMorph >> newRenderer [
+
+	^ MorphicWorldRenderer new
+]
+
 { #category : #printing }
 WorldMorph >> printOn: aStream [
 	"Reimplemented to add a tag showing that the receiver is currently functioning as a 'world', if it is"
