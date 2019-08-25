@@ -23,12 +23,7 @@ OSMorphicWindow openOn: ClyFullBrowser onDefaultEnvironment.
 "
 Class {
 	#name : #OSMorphicWindow,
-	#superclass : #AbstractWorldRenderer,
-	#instVars : [
-		'osWindow',
-		'display',
-		'kmDispatcher'
-	],
+	#superclass : #OSWorldRenderer,
 	#category : #'OSWindow-Core-Morphic'
 }
 
