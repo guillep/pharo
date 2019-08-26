@@ -179,21 +179,23 @@ OSWorldRenderer >> dispatchEvent: anEvent [
 { #category : #accessing }
 OSWorldRenderer >> displayMorph: aMorph [
 	"Update this world's display."
-
-	| allDamage |
 	aMorph submorphs do: [ :m | m fullBounds ].	"force re-layout if needed"
 
 	self morphicRenderer updateIsNeeded ifFalse: [^ self].  
 	"display is already up-to-date"
 	
-	self deferUpdatesWhile: [
+	self deferUpdatesWhile: [ | damagedAreas |
 		self drawDuring: [ :morphicCanvas |
-			allDamage := self morphicRenderer drawMorph: aMorph inCanvas: morphicCanvas.
+			damagedAreas := self morphicRenderer drawMorph: aMorph inCanvas: morphicCanvas.
 
 			"repair world's damage on canvas"
 			morphicCanvas finish.
 			"quickly copy altered rects of canvas to Display:"	
-			self updateAreas: allDamage ] ]
+			self updateAreas: damagedAreas.
+			self morphicRenderer
+				postUpdateMorph: aMorph
+				withDamagedAreas: damagedAreas
+				inCanvas: morphicCanvas ] ]
 ]
 
 { #category : #operations }

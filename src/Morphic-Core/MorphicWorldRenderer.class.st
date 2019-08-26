@@ -1,6 +1,9 @@
 Class {
 	#name : #MorphicWorldRenderer,
 	#superclass : #MorphicRenderer,
+	#instVars : [
+		'handsToDraw'
+	],
 	#category : #'Morphic-Core-Worlds'
 }
 
@@ -17,7 +20,7 @@ MorphicWorldRenderer >> drawMorph: aWorld inCanvas: aCanvas [
 	In subsequent render cycles, if the hands have moved, the elements that were behind the hand have to be invalidated so they can be drawn back. So there is a 
 	 - step 0) draw/invalidate previous hand regions before drawing anything else
 	"
-	| worldDamageRects handsToDraw handDamageRects allDamage |
+	| worldDamageRects handDamageRects allDamage |
 	
 	"step 1) draw the world morph as any other morph"
 	worldDamageRects := super drawMorph: aWorld inCanvas: aCanvas.
@@ -32,10 +35,6 @@ MorphicWorldRenderer >> drawMorph: aWorld inCanvas: aCanvas [
 	aWorld worldState class debugShowDamage
 		ifTrue: [ aWorld flashRects: allDamage color: Color black ].
 
-	"step 0) For the next cycle's correctness (and cheapness), instead of just invalidating the area, try to save some time by just copying the bytes under the hands.
-	This could be further simplified in the future with the introduction of textures/layers as in SDL."
-	handsToDraw do: [ :h | h restoreSavedPatchOn: aCanvas ].
-
 	^ allDamage
 ]
 
@@ -44,7 +43,5 @@ MorphicWorldRenderer >> postUpdateMorph: aWorld withDamagedAreas: damagedAreas i
 
 	"step 0) For the next cycle's correctness (and cheapness), instead of just invalidating the area, try to save some time by just copying the bytes under the hands.
 	This could be further simplified in the future with the introduction of textures/layers as in SDL."
-	| handsToDraw |
-	handsToDraw := aWorld worldState selectHandsToDrawForDamage: damagedAreas.
 	handsToDraw do: [ :h | h restoreSavedPatchOn: aCanvas ].
 ]
