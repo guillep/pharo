@@ -204,6 +204,18 @@ OSWorldRenderer >> pickMostSuitableWindowDriver [
 	^ driver
 ]
 
+{ #category : #'text-editing' }
+OSWorldRenderer >> requestStopTextEditing [
+	
+	osWindow stopTextInput
+]
+
+{ #category : #'text-editing' }
+OSWorldRenderer >> requestTextEditingAt: aRectangle [ 
+	
+	osWindow startTextInputAtRectangle: aRectangle
+]
+
 { #category : #initialization }
 OSWorldRenderer >> screenScaleFactor [
 	^ world scaleFactor * self windowScaleFactor

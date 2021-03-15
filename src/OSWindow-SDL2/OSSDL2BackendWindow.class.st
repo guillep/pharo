@@ -438,9 +438,10 @@ OSSDL2BackendWindow >> showCursor: aBoolean [
 ]
 
 { #category : #'text input' }
-OSSDL2BackendWindow >> startTextInput [
-	"See https://wiki.libsdl.org/SDL_StartTextInput"
+OSSDL2BackendWindow >> startTextInputAtRectangle: aRectangle [
 
+	"See https://wiki.libsdl.org/SDL_StartTextInput"
+	sdl2Window setTextInputRectangle: aRectangle asSDLRect.
 	sdl2Window startTextInput
 ]
 
@@ -550,6 +551,19 @@ OSSDL2BackendWindow >> visitMouseWheelEvent: sdlEvent [
 			scrollVertical: sdlEvent y.
 			
 	self convertButtonState: SDL2 mouseState modState: SDL2 modState modifiers: osEvent modifiers.
+	^ osEvent deliver
+]
+
+{ #category : #'event handling' }
+OSSDL2BackendWindow >> visitTextEditingEvent: event [
+	| osEvent |
+	"Nothing for now"
+	osEvent := OSTextEditingEvent for: osWindow.
+	osEvent
+		text: (ZnUTF8Encoder new decodeBytes: event text);
+		position: self mousePosition;
+		start: event start;
+		length: event length.
 	^ osEvent deliver
 ]
 

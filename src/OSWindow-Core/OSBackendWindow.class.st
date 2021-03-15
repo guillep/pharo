@@ -195,7 +195,7 @@ OSBackendWindow >> show [
 ]
 
 { #category : #'text input' }
-OSBackendWindow >> startTextInput [
+OSBackendWindow >> startTextInputAtRectangle: anObject [
 	self subclassResponsibility
 ]
 

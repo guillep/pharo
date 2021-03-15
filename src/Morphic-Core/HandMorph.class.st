@@ -656,7 +656,6 @@ HandMorph >> handleEvent: anEvent [
 	| evt  |
 	owner ifNil:[^self].
 	evt := anEvent.
-	
 	"nil test here is for efficiency in the normal case"
 	EventStats ifNotNil: [ self class logEventStats: evt ]. 
 	
@@ -671,6 +670,9 @@ HandMorph >> handleEvent: anEvent [
 	
 	"Notify listeners"
 	self sendListenEvent: evt to: self eventListeners.
+
+	evt isTextEditionEvent ifTrue: [
+		^ self sendEvent: evt focus: nil ].
 
 	evt isWindowEvent ifTrue: [
 		^ self sendEvent: evt focus: nil ].

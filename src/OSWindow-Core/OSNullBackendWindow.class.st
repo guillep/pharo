@@ -100,7 +100,7 @@ OSNullBackendWindow >> show [
 ]
 
 { #category : #'text input' }
-OSNullBackendWindow >> startTextInput [
+OSNullBackendWindow >> startTextInputAtRectangle: anObject [
 	isTextInputActive := true
 ]
 
