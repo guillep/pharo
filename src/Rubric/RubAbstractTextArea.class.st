@@ -95,7 +95,8 @@ Class {
 		'mouseDownPoint',
 		'completionEngine',
 		'maxLength',
-		'findReplaceService'
+		'findReplaceService',
+		'editing'
 	],
 	#classVars : [
 		'BackgroundColor',
@@ -736,6 +737,12 @@ RubAbstractTextArea >> editPrimarySelectionSeparately [
 	(view embeddedInMorphicWindowLabeled: 'Selection editing') openInHand.
 ]
 
+{ #category : #accessing }
+RubAbstractTextArea >> editing [
+
+	^ editing
+]
+
 { #category : #'accessing editing mode' }
 RubAbstractTextArea >> editingMode [
 	^ editingMode
@@ -1029,6 +1036,12 @@ RubAbstractTextArea >> handlesMouseOver: evt [
 	^ self enabled
 ]
 
+{ #category : #'event handling' }
+RubAbstractTextArea >> handlesTextEditionEvent: anEvent [
+
+	^ true
+]
+
 { #category : #completion }
 RubAbstractTextArea >> hasCompletionEngine [
 	
@@ -1085,7 +1098,8 @@ RubAbstractTextArea >> initialize [
 	self compose.
 	self addCursor.
 	self plugFindReplace.
-	DefaultTextColor := self theme textColor
+	DefaultTextColor := self theme textColor.
+	editing := false
 ]
 
 { #category : #keymapping }
@@ -1129,7 +1143,9 @@ RubAbstractTextArea >> keyStroke: anEvent [
 	"Handle a keystroke event."
 	anEvent hand anyButtonPressed
 		ifTrue: [ ^ self ].
-	self handleEdit: [ self editor keystroke: anEvent ].
+	self handleEdit: [ 
+		editing := false.
+		self editor keystroke: anEvent ].
 	self scrollSelectionIntoView: nil
 ]
 
@@ -1138,9 +1154,14 @@ RubAbstractTextArea >> keyboardFocusChange: aBoolean [
 	aBoolean
 		ifTrue: [
 			self hasFocus: true.
+			self requestTextEditingAt: (self cursor positionInWorld
+				corner: self cursor positionInWorld).
 			self showOverEditableTextCursor ]
 		ifFalse: [ 
 			self hasFocus: false.
+			self requestStopTextEditing.
+			self requestTextEditingAt: (self cursor positionInWorld
+				corner: self cursor positionInWorld).
 			self hideOverEditableTextCursor ].
 	super keyboardFocusChange: aBoolean.
 	self focusChanged.
@@ -1902,6 +1923,18 @@ RubAbstractTextArea >> textColor: newColor [
 	textColor := newColor.
 	self addAttribute: (TextColor color: newColor).
 	self changed.
+]
+
+{ #category : #'event handling' }
+RubAbstractTextArea >> textEdition: aTextEditionEvent [
+
+	"[ | done | done ifNil: [ done := true. aTextEditionEvent inspect ] ] value."
+	'okk' traceCr.
+	self selectFrom: self stopIndex - aTextEditionEvent length - 1 to: self stopIndex - 1.
+	
+	self zapSelectionWith: aTextEditionEvent text.
+	'yes' traceCr.
+	editing := true.
 ]
 
 { #category : #'accessing text' }
