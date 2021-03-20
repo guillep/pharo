@@ -1150,7 +1150,6 @@ RubAbstractTextArea >> keyStroke: anEvent [
 	anEvent hand anyButtonPressed ifTrue: [ ^ self ].
 	self handleEdit: [ 
 		editing = true ifTrue: [ 
-			self editor unselect.
 			editing := false ].
 		self editor keystroke: anEvent ].
 	self scrollSelectionIntoView: nil
