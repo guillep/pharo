@@ -1042,6 +1042,12 @@ RubAbstractTextArea >> handlesTextEditionEvent: anEvent [
 	^ true
 ]
 
+{ #category : #'event handling' }
+RubAbstractTextArea >> handlesTextInputEvent: anEvent [
+
+	^ true
+]
+
 { #category : #completion }
 RubAbstractTextArea >> hasCompletionEngine [
 	
@@ -1122,29 +1128,29 @@ RubAbstractTextArea >> isReadOnly [
 
 { #category : #'event handling' }
 RubAbstractTextArea >> keyDown: anEvent [
-	"Handle a keystroke event."
-	anEvent key = KeyboardKey enter
-		ifTrue: [ self handleReturnKey
-				ifTrue: [ ^ self ] ].
 
-	anEvent hand anyButtonPressed
-		ifTrue: [ ^ self ].
-	self scrollPane
-		ifNotNil: [ :sp | 
-			(sp scrollByKeyboard: anEvent)
-				ifTrue: [ ^ self ] ].
-	anEvent isUserInterrupt
-		ifTrue: [ ^ self ].
-	self handleEdit: [ self editor keyDown: anEvent ].
+	"Handle a keystroke event."
+
+	editing = true ifTrue: [ ^ self ].
+	anEvent key = KeyboardKey enter ifTrue: [ 
+		self handleReturnKey ifTrue: [ ^ self ] ].
+
+	anEvent hand anyButtonPressed ifTrue: [ ^ self ].
+	self scrollPane ifNotNil: [ :sp | 
+		(sp scrollByKeyboard: anEvent) ifTrue: [ ^ self ] ].
+	anEvent isUserInterrupt ifTrue: [ ^ self ].
+	self handleEdit: [ self editor keyDown: anEvent ]
 ]
 
 { #category : #'event handling' }
 RubAbstractTextArea >> keyStroke: anEvent [
+
 	"Handle a keystroke event."
-	anEvent hand anyButtonPressed
-		ifTrue: [ ^ self ].
+
+	anEvent hand anyButtonPressed ifTrue: [ ^ self ].
 	self handleEdit: [ 
-		editing := false.
+		editing = true ifTrue: [ 
+			editing := false ].
 		self editor keystroke: anEvent ].
 	self scrollSelectionIntoView: nil
 ]
@@ -1928,12 +1934,7 @@ RubAbstractTextArea >> textColor: newColor [
 { #category : #'event handling' }
 RubAbstractTextArea >> textEdition: aTextEditionEvent [
 
-	"[ | done | done ifNil: [ done := true. aTextEditionEvent inspect ] ] value."
-	'okk' traceCr.
-	self selectFrom: self stopIndex - aTextEditionEvent length - 1 to: self stopIndex - 1.
-	
-	self zapSelectionWith: aTextEditionEvent text.
-	'yes' traceCr.
+	self editor zapSelectionWith: aTextEditionEvent text.
 	editing := true.
 ]
 
@@ -1944,6 +1945,13 @@ RubAbstractTextArea >> textFont: aFont [
 	self recomputeSelection.
 	self  announce: (RubTextStyleChanged morph: self).
 
+]
+
+{ #category : #'event handling' }
+RubAbstractTextArea >> textInput: aTextInputEvent [
+	self editor zapSelectionWith: aTextInputEvent text.
+	self editor unselect.
+	editing := false
 ]
 
 { #category : #'accessing text' }

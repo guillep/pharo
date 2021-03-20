@@ -3069,6 +3069,16 @@ Morph >> handleTextEditionEvent: anEvent [
 ]
 
 { #category : #'events-processing' }
+Morph >> handleTextInputEvent: anEvent [
+	"System level event handling."
+	
+	anEvent wasHandled ifTrue:[^self].
+	(self handlesTextInputEvent: anEvent) ifTrue:[
+		anEvent wasHandled: true.
+		self textInput: anEvent]
+]
+
+{ #category : #'events-processing' }
 Morph >> handleUnknownEvent: anEvent [
 	"An event of an unknown type was sent to the receiver. What shall we do?!"
 	self inform: 'Unknown event: ', anEvent printString. 
@@ -3252,6 +3262,13 @@ Morph >> handlesMouseWheel: evt [
 
 { #category : #'events-processing' }
 Morph >> handlesTextEditionEvent: evt [
+	"Do I want to receive text edition events?" 
+
+	^false
+]
+
+{ #category : #'events-processing' }
+Morph >> handlesTextInputEvent: evt [
 	"Do I want to receive text edition events?" 
 
 	^false
