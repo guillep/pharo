@@ -22,12 +22,12 @@ TextEditionEvent >> length [
 ]
 
 { #category : #accessing }
-TextEditionEvent >> length: anObject [
+TextEditionEvent >> length: anInteger [
 
-	length := anObject
+	length := anInteger
 ]
 
-{ #category : #accessing }
+{ #category : #dispatching }
 TextEditionEvent >> sentTo: anObject [
 
 	^anObject handleTextEditionEvent: self
@@ -40,9 +40,9 @@ TextEditionEvent >> start [
 ]
 
 { #category : #accessing }
-TextEditionEvent >> start: anObject [
+TextEditionEvent >> start: anInteger [
 
-	start := anObject
+	start := anInteger
 ]
 
 { #category : #accessing }
@@ -52,7 +52,7 @@ TextEditionEvent >> text [
 ]
 
 { #category : #accessing }
-TextEditionEvent >> text: anObject [
+TextEditionEvent >> text: aString [
 
-	text := anObject
+	text := aString
 ]

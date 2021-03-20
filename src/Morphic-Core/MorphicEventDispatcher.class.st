@@ -208,6 +208,11 @@ MorphicEventDispatcher >> handleTextEditionEvent: aTextEditionEvent [
 ]
 
 { #category : #'dispatching-callback' }
+MorphicEventDispatcher >> handleTextInputEvent: aTextInputEvent [ 
+	^ self dispatchDefault: aTextInputEvent with: morph
+]
+
+{ #category : #'dispatching-callback' }
 MorphicEventDispatcher >> handleUnknownEvent: anEvent [ 
 	^ self dispatchDefault: anEvent with: morph
 ]

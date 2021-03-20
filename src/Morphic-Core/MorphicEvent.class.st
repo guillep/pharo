@@ -91,6 +91,12 @@ MorphicEvent >> isTextEditionEvent [
 ]
 
 { #category : #testing }
+MorphicEvent >> isTextInputEvent [
+
+	^ false
+]
+
+{ #category : #testing }
 MorphicEvent >> isWindowEvent [
 	^false
 ]
