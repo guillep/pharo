@@ -255,6 +255,18 @@ GeneralScrollPane >> handlesMouseWheel: evt [
 	^true
 ]
 
+{ #category : #'event handling' }
+GeneralScrollPane >> handlesTextEditionEvent: anEvent [
+
+	^ self scrollTarget handlesTextEditionEvent: anEvent
+]
+
+{ #category : #'event handling' }
+GeneralScrollPane >> handlesTextInputEvent: anEvent [
+
+	^ self scrollTarget handlesTextInputEvent: anEvent
+]
+
 { #category : #initialization }
 GeneralScrollPane >> initialize [
 	"Initialize the receiver."
@@ -444,6 +456,18 @@ GeneralScrollPane >> setScrollDeltas [
 	self
 		hSetScrollDelta;
 		vSetScrollDelta
+]
+
+{ #category : #'event handling' }
+GeneralScrollPane >> textEdition: aTextEditionEvent [
+
+	self scrollTarget textEdition: aTextEditionEvent
+]
+
+{ #category : #'event handling' }
+GeneralScrollPane >> textInput: aTextInputEvent [
+
+	self scrollTarget textInput: aTextInputEvent
 ]
 
 { #category : #updating }

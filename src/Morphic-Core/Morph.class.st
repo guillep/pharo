@@ -6288,6 +6288,10 @@ Morph >> textAnchorType: aSymbol [
 Morph >> textEdition: aTextEditionEvent [
 ]
 
+{ #category : #'event handling' }
+Morph >> textInput: aTextInputEvent [
+]
+
 { #category : #theme }
 Morph >> theme [
 	"Answer the current theme for the receiver."
