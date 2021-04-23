@@ -740,7 +740,7 @@ RubAbstractTextArea >> editPrimarySelectionSeparately [
 { #category : #accessing }
 RubAbstractTextArea >> editing [
 
-	^ editing
+	^ editing = true
 ]
 
 { #category : #'accessing editing mode' }
@@ -1079,7 +1079,11 @@ RubAbstractTextArea >> hasFocus [
 
 { #category : #'accessing editing state' }
 RubAbstractTextArea >> hasFocus: aBoolean [
-	^ self editingState hasFocus: aBoolean 
+
+	(aBoolean ~= self hasFocus and: [ editing = true ]) ifTrue: [ 
+		self editor unselect.
+		editing := false ].
+	^ self editingState hasFocus: aBoolean
 ]
 
 { #category : #'accessing selection' }
