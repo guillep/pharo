@@ -6314,7 +6314,7 @@ Morph >> tileTopRight [
 { #category : #accessing }
 Morph >> title [
 
-	^ nil
+	^ self printString
 ]
 
 { #category : #rounding }

@@ -223,13 +223,13 @@ MorphicNativeWindow >> open [
 	backend := window openInExternalWindow.
 	osWindow := self backend worldState worldRenderer osWindow.
 	attributes := osWindow initialAttributes.
-	self updateTitle .
-	osWindow announcer weak
+	self updateTitle.
+	osWindow announcer
 		when: DeleteWindowByCrossAnnouncement
 		send: #deleteByCross
 		to: self.
-	window announcer weak
-		when: WindowLabelled 
+	window announcer
+		when: WindowLabelled
 		send: #windowTitleChanged:
 		to: self
 ]
@@ -369,9 +369,13 @@ MorphicNativeWindow >> theme [
 { #category : #'private - updating' }
 MorphicNativeWindow >> updateTitle [
 
-	window title ifNotNil: [
-		self osWindow backendWindow sdl2Window title:
-			Smalltalk shortImageName , ' | ' , window title ]
+	self updateTitle: window title
+]
+
+{ #category : #'private - updating' }
+MorphicNativeWindow >> updateTitle: aTitle [
+
+	self osWindow title: Smalltalk shortImageName , ' | ' , aTitle
 ]
 
 { #category : #getter }
@@ -388,6 +392,5 @@ MorphicNativeWindow >> window: aWindow [
 MorphicNativeWindow >> windowTitleChanged: anAnnouncement [
 
 	anAnnouncement label ifNotNil: [
-		self osWindow backendWindow sdl2Window title:
-			Smalltalk shortImageName , ' | ' , anAnnouncement label ]
+		self updateTitle: anAnnouncement label ]
 ]

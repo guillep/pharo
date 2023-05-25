@@ -1821,7 +1821,7 @@ SystemWindow >> setLabel: aString [
 		                label: aString;
 		                yourself.
 	self announce: announcement.
-	self currentWorld announcer announce: announcement.
+
 	label ifNil: [ ^ self ].
 	label contents: aString.
 	self labelWidgetAllowance. "Sets it if not already"
@@ -1849,8 +1849,7 @@ SystemWindow >> setLabel: aString [
 		topFraction: 0.5;
 		leftOffset: label width negated // 2;
 		topOffset: label height negated // 2.
-	label layoutFrame: frame.
-	self currentWorld announcer announce: WindowLabelled
+	label layoutFrame: frame
 ]
 
 { #category : #label }
