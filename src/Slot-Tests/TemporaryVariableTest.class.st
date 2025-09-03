@@ -42,7 +42,7 @@ TemporaryVariableTest >> testHasTemporaryVariablesMethod [
 
 { #category : 'tests' }
 TemporaryVariableTest >> testIsReferenced [
-	| method notReferenced |
+	| method |
 	"The temp notReferenced is not used as we test exactly that here"
 	method := self class >> #testIsReferenced.
 	self assert: method temporaryVariables first isReferenced.
