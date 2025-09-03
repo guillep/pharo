@@ -320,7 +320,7 @@ Context >> tempNamed: aName [
 
 	| debugInfo |
 	debugInfo := self method debugInfo.
-	^ debugInfo readVariableNamed: aName at: self
+	^ debugInfo readVariableNamed: aName fromContext: self
 ]
 
 { #category : '*Debugging-Core' }
