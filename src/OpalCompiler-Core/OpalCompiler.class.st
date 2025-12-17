@@ -501,8 +501,12 @@ OpalCompiler >> generateIR [
 		"We need to copy the AST node to avoid the recursive `generateIR` call from re-entering this condition"
 		copy := ast copy.
 		copy removePragmaNamed: pragma selector.
-		ir := copy generateIR compiledMethod valueWithReceiver: nil arguments: (Array new: copy arguments size).
+		ir := (copy generateIR
+			compiledMethod)
+				valueWithReceiver: nil
+				arguments: (Array new: copy arguments size).
 		ir sourceNode: ast.
+		ir 	addPragma: pragma pragma.
 		^ ir
 	].
 
@@ -549,13 +553,36 @@ OpalCompiler >> install [
 	logSource := self logged ifNil: [ true ].
 	protocol := protocol ifNil: [ self priorMethod ifNotNil: [ self priorMethod protocol name ] ].
 
-	logSource ifTrue: [
-			method
-				putSource: source
-				withFooter: ''
-				protocol: protocol asString
-				timestamp: changeStamp asString
-				priorSourcePointer: (self priorMethod ifNil: [ 0 ] ifNotNil: [ self priorMethod sourcePointer ]) ].
+	logSource ifTrue: [ | footer debugInfo metadata |
+		footer := ''.
+		(method hasPragmaNamed: #opalBytecodeMethod) ifFalse: [
+			debugInfo := (String streamContents: [ :stream |
+				(STONWriter on: stream)
+					nextPut: method debugInfo asOfflineDebugInfo  ]) zipped.
+
+			metadata := Dictionary new.
+			metadata at: 'debugInfo' put: debugInfo.
+			
+			method allBlocksDo: [ :b | | blockDebugInfo blockKey |
+				blockDebugInfo := (String streamContents: [ :stream |
+				(STONWriter on: stream)
+					nextPut: b debugInfo asOfflineDebugInfo  ]) zipped.
+				blockKey := 'debugInfo-', ('-' join: b pathOfLiteralIndexes).
+				metadata at: blockKey put: blockDebugInfo.
+			].
+
+			footer := (String streamContents: [ :stream |
+				(STONWriter on: stream)
+					prettyPrint: true;
+					nextPut: metadata ]).
+		].
+		
+		method
+			putSource: source
+			withFooter: footer
+			protocol: protocol asString
+			timestamp: changeStamp asString
+			priorSourcePointer: (self priorMethod ifNil: [ 0 ] ifNotNil: [ self priorMethod sourcePointer ]) ].
 
 	"Install the method and classify AFTER setting the source pointer.
 	If the method is a trait method, trait installation is hooked down here.
