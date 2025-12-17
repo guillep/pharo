@@ -264,6 +264,20 @@ SourceFileArray >> logChange: aStringOrText [
 		onFail: [ "Ignore" ]
 ]
 
+{ #category : 'public - string reading' }
+SourceFileArray >> metadataAt: sourcePointer [
+
+	^ self
+		readStreamAt: sourcePointer
+		ifPresent: [ :stream |
+			| reader |
+			reader := ChunkReadStream on: stream.
+			"skip the sourceCode, return the metadata after it".
+			reader next.
+			reader next. ]
+		ifAbsent: [ '' ]
+]
+
 { #category : 'public - string writing' }
 SourceFileArray >> newWriter [
 
