@@ -36,7 +36,7 @@ RGDefinition class >> isAbstract [
 RGDefinition class >> named: aName [
 
 	^self new
-		name: aName asSymbol;
+		name: aName;
 		yourself
 ]
 
@@ -229,7 +229,7 @@ RGDefinition >> name [
 RGDefinition >> name: anObject [
 	"a symbol or a string should be expected"
 
-	name:= anObject
+	name:= anObject asString
 ]
 
 { #category : 'annotations' }
