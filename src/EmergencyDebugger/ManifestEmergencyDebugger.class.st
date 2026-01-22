@@ -9,6 +9,13 @@ Class {
 	#tag : 'Manifest'
 }
 
+{ #category : 'meta-data - dependency analyser' }
+ManifestEmergencyDebugger class >> manuallyResolvedDependencies [
+
+	<ignoreForCoverage>
+	^ #(#'System-Changes')
+]
+
 { #category : 'code-critics' }
 ManifestEmergencyDebugger class >> ruleReToDoRuleV1FalsePositive [
 	^ #(#(#(#RGMethodDefinition #(#EDEmergencyDebugger #composeStackText #false)) #'2020-04-10T12:25:37.258447+02:00') )
