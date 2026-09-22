@@ -163,7 +163,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: bootstrap64-base
-          path: bootstrap-cache
+          path: build/bootstrap-cache
 
       - name: Install full image
         run: |
