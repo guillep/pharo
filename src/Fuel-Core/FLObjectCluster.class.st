@@ -30,7 +30,7 @@ FLObjectCluster class >> newAnalyzing: aClass [
 FLObjectCluster >> clusterMaterializeStepWith: aDecoder [
 
 	super clusterMaterializeStepWith: aDecoder.
-	theClass := aDecoder nextEncodedReference
+	self setAnalyzedClass: aDecoder nextEncodedReference
 ]
 
 { #category : 'analyzing' }
@@ -50,7 +50,7 @@ FLObjectCluster >> clusterSerializeStepWith: anEncoder [
 FLObjectCluster >> initializeAnalyzing: aClass [
 
 	self initializeAnalyzing.
-	theClass := aClass
+	self setAnalyzedClass: aClass
 ]
 
 { #category : 'printing' }
@@ -62,6 +62,12 @@ FLObjectCluster >> printNameOn: aStream [
 	aStream nextPut: $[.
 	theClass printOn: aStream.
 	aStream nextPut: $].
+]
+
+{ #category : 'as yet unclassified' }
+FLObjectCluster >> setAnalyzedClass: aClass [
+
+	^ theClass := aClass
 ]
 
 { #category : 'printing' }
