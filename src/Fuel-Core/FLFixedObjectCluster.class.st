@@ -19,3 +19,15 @@ FLFixedObjectCluster >> materializeInstanceWith: aDecoder [
 FLFixedObjectCluster >> serializeInstancesStepWith: anEncoder [
 	"Do nothing. I know my objects have nothing to serialize in this step."
 ]
+
+{ #category : 'as yet unclassified' }
+FLFixedObjectCluster >> setAnalyzedClass: aClass [
+
+	| blackList |
+	"Fuel has been reviewed to prevent general serialization/deserialization of these types.
+	They should use specific clusters that ensure safe serialization/deserialization."
+	blackList := { DoubleLinkedList . LinkedList }.
+	(blackList includes: aClass)
+		ifTrue: [ FLConfigurationError signal: 'Cannot configure this generic cluster with the blacklisted class. Use the specialized cluster for: ', aClass name ].
+	super setAnalyzedClass: aClass
+]
