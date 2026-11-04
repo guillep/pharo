@@ -304,19 +304,6 @@ SystemNavigation >> browseMethodsWithString: aString matchCase: caseSensitive [
 ]
 
 { #category : '*Tool-Base' }
-SystemNavigation >> browseObsoleteReferences [
-	<script>
-	"Open a browser on all referenced behaviors that are obsolete"
-	"SystemNavigation new browseObsoleteReferences"
-
-	| list |
-	list := self methodsReferencingObsoleteClasses.
-	^ self
-		browseMessageList: list
-		name: 'Method referencing obsoletes'
-]
-
-{ #category : '*Tool-Base' }
 SystemNavigation >> browseSendersOf: aSelector name: labelString autoSelect: autoSelectString [
 
 	^ self

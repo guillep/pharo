@@ -669,8 +669,7 @@ PackageTest >> testRemoveTagRemoveClasses [
 	self deny: (((p1 classesTaggedWith: #foo) collect: [ :each | each name ]) includes: #B1DefinedInX).
 	self assertEmpty: (p1 classesTaggedWith: #foo).
 	self deny: (p1 includesClass: a1).
-	self assert: (self organizer packageOf: a1) name equals: UndefinedPackage undefinedPackageName.
-	self assert: a1 isObsolete
+	self assert: (self organizer packageOf: a1) name equals: UndefinedPackage undefinedPackageName
 ]
 
 { #category : 'tests' }

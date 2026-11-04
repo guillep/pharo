@@ -32,12 +32,8 @@ FLFullGeneralMapper >> initialize [
 
 { #category : 'testing' }
 FLFullGeneralMapper >> isBehaviorAnonymous: aBehavior [
-	^ (self environment includes: aBehavior instanceSide)
-		ifTrue: [ false ]
-		ifFalse: [
-			aBehavior isObsolete ifTrue: [
-				FLObsolete signalWithName: aBehavior name ].
-			 true ]
+
+	^ (self environment includes: aBehavior instanceSide) not
 ]
 
 { #category : 'testing' }

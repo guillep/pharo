@@ -525,63 +525,6 @@ SmalltalkImage >> fileForImageNamed: aString [
 	^(self imageDirectory resolve: aString), self imageSuffix
 ]
 
-{ #category : 'housekeeping' }
-SmalltalkImage >> fixObsoleteBindings [
-	CompiledMethod allInstances do: [ :method |
-		| obsoleteBindings |
-
-		"Added to check because sometimes the bootstrap fails to generate some methods."
-		self assert: (method header isKindOf: SmallInteger) description: (method name , ' has an invalid header:' , method header asString).
-
-		obsoleteBindings := method literals select: [ :literal |
-				literal isVariableBinding and: [
-					literal value isBehavior and: [
-						literal value isObsolete ] ] ].
-		obsoleteBindings do: [ :binding |
-			| obsName realName realClass |
-			obsName := binding value name.
-			self
-				trace: 'Binding: ';
-				traceCr: obsName.
-			realName := obsName copyReplaceAll: 'AnObsolete' with: ''.
-			realClass := Smalltalk globals at: realName asSymbol ifAbsent: [ UndefinedObject ].
-			binding key: binding key value: realClass ].
-		"do not forget to flush the JIT cache"
-		obsoleteBindings ifNotEmpty: [ method flushCache ] ]
-]
-
-{ #category : 'housekeeping' }
-SmalltalkImage >> fixObsoleteReferences [
-	"SmalltalkImage current fixObsoleteReferences.
-	SystemNavigation new obsoleteBehaviors size > 0
-		ifTrue: [ SystemNavigation new obsoleteBehaviors inspect.
-			self error:'Still have obsolete behaviors. See inspector']"
-
-	self
-		garbageCollect;
-		fixObsoleteBindings;
-		fixObsoleteSharedPools
-]
-
-{ #category : 'housekeeping' }
-SmalltalkImage >> fixObsoleteSharedPools [
-	self cleanOutUndeclared.
-	self allClasses
-		select: [ :class |
-			class sharedPools isEmptyOrNil not and: [
-				class sharedPools contains: #isObsolete ] ]
-		thenDo: [ :class |
-			| obsolete |
-			obsolete := class sharedPools select: #isObsolete.
-			class sharedPools removeAll: obsolete ].
-
-	"#sharedPools is a lazy initializer and most classes don't have a shared pool.
-	Resetting the shared pools to nil should therefore save a bit of space."
-	self allClasses
-		select: [ :class | class sharedPools isEmpty ]
-		thenDo: [ :class | class sharedPools: nil ]
-]
-
 { #category : 'to clean later' }
 SmalltalkImage >> flushClassNameCache [
 	"Smalltalk flushClassNameCache"

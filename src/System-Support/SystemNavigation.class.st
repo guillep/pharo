@@ -448,59 +448,6 @@ SystemNavigation >> methods [
 	^ self environment methods
 ]
 
-{ #category : 'identifying obsoletes' }
-SystemNavigation >> methodsReferencingObsoleteClasses [
-	"Returns all methods that reference obsolete behaviors"
-
-	| obsClasses |
-	obsClasses := self obsoleteClasses.
-
-	^Array streamContents: [ :methods |
-		obsClasses keysAndValuesDo:
-			[ :index :each | | obsRefs |
-			obsRefs := each pointersToExcept: obsClasses.
-			obsRefs do: [ :ref |
-				"Figure out if it may be a global"
-				(ref isVariableBinding and: [ref key isString	"or Symbol"])
-					ifTrue: [
-						(ref pointersTo) do: [ :meth |
-							meth isCompiledMethod
-								ifTrue: [methods nextPut: meth]]]]]]
-]
-
-{ #category : 'identifying obsoletes' }
-SystemNavigation >> obsoleteClasses [
-	"SystemNavigation new obsoleteClasses inspect"
-	"NOTE:  Also try inspecting comments below"
-
-	| obs |
-	obs := OrderedCollection new.
-	Smalltalk garbageCollect.
-	Metaclass
-		allInstancesDo: [ :m |
-			| c |
-			c := m soleInstance.
-			(c isNotNil and: [ c isObsolete ])
-				ifTrue: [ obs add: c ] ].
-	^ obs asArray
-
-"Likely in a ClassDict or Pool...
-(Association allInstances select: [:a | (a value isKindOf: Class) and: [a value isObsolete]]) asArray
-"
-
-"Obsolete class refs or super pointer in last lit of a method...
-| n l found |
-SystemNavigation new browseAllSelect:
-	[:m | found := false.
-	1 to: m numLiterals do:
-		[:i | (((l := m literalAt: i) isMemberOf: Association)
-				and: [(l value isKindOf: Behavior)
-				and: [l value isObsolete]])
-			ifTrue: [found := true]].
-	found]
-"
-]
-
 { #category : 'removing' }
 SystemNavigation >> removeClass: aClass [
 	"Remove the selected class from the system, at interactive user request.  Make certain the user really wants to do this, since it is not reversible.  Answer true if removal actually happened."

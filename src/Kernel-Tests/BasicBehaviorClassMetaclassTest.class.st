@@ -51,38 +51,15 @@ BasicBehaviorClassMetaclassTest >> testMetaclassNumberOfInstances [
 
 { #category : 'tests' }
 BasicBehaviorClassMetaclassTest >> testMetaclassPointOfCircularity [
-	self assert: Metaclass class instanceCount equals: 1.
-	self assert: Metaclass class someInstance identicalTo: Metaclass
+
+	self assert: Metaclass class someInstance identicalTo: Metaclass.
+	self assert: Metaclass class someInstance class identicalTo: Metaclass class
 ]
 
 { #category : 'tests' }
 BasicBehaviorClassMetaclassTest >> testMetaclassSuperclass [
 	self assert: Dictionary class superclass identicalTo: Dictionary superclass class.
 	self assert: OrderedCollection class superclass identicalTo: OrderedCollection superclass class
-]
-
-{ #category : 'tests' }
-BasicBehaviorClassMetaclassTest >> testMetaclassSuperclassHierarchy [
-	| s |
-	self assert: SequenceableCollection class instanceCount equals: 1.
-	self assert: Collection class instanceCount equals: 1.
-	self assert: Object class instanceCount equals: 1.
-	self assert: ProtoObject class instanceCount equals: 1.
-
-	s := (OrderedCollection new)
-				add: SequenceableCollection class;
-				add: Collection class;
-				add: Object class;
-				add: ProtoObject class;
-
-				add: Class;
-				add: ClassDescription;
-				add: Behavior;
-				add: Object;
-				add: ProtoObject;
-				yourself.
-
-	self assert: OrderedCollection class allSuperclasses equals: s
 ]
 
 { #category : 'tests' }

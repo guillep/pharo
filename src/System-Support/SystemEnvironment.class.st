@@ -467,12 +467,7 @@ SystemEnvironment >> resetPseudoVariables [
 SystemEnvironment >> traitNames [
 	"Answer a SortedCollection of all traits (not including class-traits) names."
 
-	^ self classNames select: [ :name |
-		  self
-			  at: name
-			  ifPresent: [ :global |
-			  global isTrait and: [ global isObsolete not ] ]
-			  ifAbsent: [ false ] ]
+	^ self classNames select: [ :name | self at: name ifPresent: [ :global | global isTrait ] ifAbsent: [ false ] ]
 ]
 
 { #category : 'accessing' }

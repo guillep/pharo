@@ -552,8 +552,7 @@ TraitTest >> testRemoveFromSystem [
 	aTrait := self newTrait: #T1.
 	aClass := self newClass: #AClassForTests traits: aTrait.
 	aTrait removeFromSystem: false.
-	self deny: aClass hasTraitComposition.
-	self assert: aTrait isObsolete
+	self deny: aClass hasTraitComposition
 ]
 
 { #category : 'tests' }

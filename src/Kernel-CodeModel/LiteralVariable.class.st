@@ -106,8 +106,8 @@ LiteralVariable >> isAccessedIn: aMethod [
 
 { #category : 'testing' }
 LiteralVariable >> isGlobalClassNameBinding [
-	^ self value isClassOrTrait
-		and: [ (name == self value name) or: [ self value isObsolete ] ]
+
+	^ self value isClassOrTrait and: [ name == self value name ]
 ]
 
 { #category : 'testing' }

@@ -156,6 +156,7 @@ ClyInheritanceAnalysisEnvironmentPlugin >> isClassCheapForOverriddenMethodsAnaly
 
 { #category : 'methods analysis' }
 ClyInheritanceAnalysisEnvironmentPlugin >> isMethodOverridden: aMethod [
+
 	| classes methodClass |
 	"Implementors cache optimizes analyzis only for classes with a lot of subclasses.
 	For example Object and Morph are really profit from it.
@@ -164,13 +165,11 @@ ClyInheritanceAnalysisEnvironmentPlugin >> isMethodOverridden: aMethod [
 	In addition using cheap processing path allows to defer the cache building.
 	It removes the effect of initial slow analysis from general browser experience
 	where user rarely browse the root classes of big hierarchies"
-	(self isClassCheapForOverriddenMethodsAnalysis: aMethod methodClass) ifTrue: [
-			^aMethod isOverridden ].
+	(self isClassCheapForOverriddenMethodsAnalysis: aMethod methodClass) ifTrue: [ ^ aMethod isOverridden ].
 
 	classes := self implementorsOf: aMethod.
 	methodClass := aMethod methodClass.
-	^classes anySatisfy: [ :each |
-		each isNotNil and: [(each inheritsFrom: methodClass) and: [ each isObsolete not ]]]
+	^ classes anySatisfy: [ :each | each isNotNil and: [ each inheritsFrom: methodClass ] ]
 ]
 
 { #category : 'methods analysis' }
@@ -242,13 +241,12 @@ ClyInheritanceAnalysisEnvironmentPlugin >> processMethodChange: aMethodAnnouncem
 ClyInheritanceAnalysisEnvironmentPlugin >> removeMethodFromCache: aMethod [
 
 	| classes |
-	classes := allImplementorsCache at: aMethod selector ifAbsent: [^self].
+	classes := allImplementorsCache at: aMethod selector ifAbsent: [ ^ self ].
 	classes remove: aMethod methodClass ifAbsent: [ ].
 	"Classes are WeakOrderedCollection
 	and when it is cleaned by GS it does not become empty. All items are just replaced by nil"
-	(classes isEmpty or: [
-		classes allSatisfy: [:each | each isNil or: [ each isObsolete ] ]])
-			ifTrue: [allImplementorsCache removeKey: aMethod selector]
+	(classes isEmpty or: [ classes allSatisfy: [ :each | each isNil ] ])
+		ifTrue: [ allImplementorsCache removeKey: aMethod selector ]
 ]
 
 { #category : 'implementors cache' }

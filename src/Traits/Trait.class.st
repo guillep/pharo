@@ -206,8 +206,8 @@ Trait >> removeFromSystem: logged [
 	self traitComposition removeUser: self.
 	self class traitComposition removeUser: self class.
 
-	self traitUsers do: [ :e | e isObsolete ifFalse: [ e removeFromComposition: self ]].
-	self class traitUsers do: [ :e | e isObsolete ifFalse: [e removeFromComposition: self class ]].
+	self traitUsers do: [ :e | e removeFromComposition: self ].
+	self class traitUsers do: [ :e | e removeFromComposition: self class ].
 	^ super removeFromSystem: logged
 ]
 

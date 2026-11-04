@@ -234,10 +234,9 @@ ClassAnnotation class >> cleanRedefinedGarbage [
 		- annotation method was removed.
 		- annotated class was removed
 		- and various changes related to class hierarchy"
-	redefinedInstances ifNil: [ ^self].
 
-	(redefinedInstances select: [ :each | each isObsolete ])
-		do: [ :each | redefinedInstances removeKey: each ]
+	redefinedInstances ifNil: [ ^ self ].
+	redefinedInstances do: [ :each | redefinedInstances removeKey: each ]
 ]
 
 { #category : 'private' }
@@ -531,12 +530,6 @@ ClassAnnotation >> isForbidden [
 	By default annotation can annotate any class"
 
 	^false
-]
-
-{ #category : 'testing' }
-ClassAnnotation >> isObsolete [
-
-	^(self class isInstanceRegistered: self) not
 ]
 
 { #category : 'testing' }

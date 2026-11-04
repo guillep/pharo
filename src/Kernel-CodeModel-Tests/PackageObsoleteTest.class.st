@@ -10,24 +10,6 @@ Class {
 }
 
 { #category : 'tests' }
-PackageObsoleteTest >> testMethodPackageFromObsoleteClass [
-
-	| pack method foo |
-	pack := self ensurePackage: 'P1'.
-	foo := self newClassNamed: #FooForTest in: pack.
-	foo compile: 'bar ^42'.
-	method := foo >> #bar.
-
-	[
-	foo obsolete.
-	self assert: method package equals: foo package ] ensure: [
-		foo ifNotNil: [
-			foo setName: foo originalName.
-			foo removeFromSystem ].
-		testingEnvironment removeKey: #FooForTest ifAbsent: [  ] ]
-]
-
-{ #category : 'tests' }
 PackageObsoleteTest >> testMethodPackageOfRemovedClass [
 
 	| pack method foo |

@@ -97,7 +97,7 @@ ClyClassHierarchyScope >> allClassesRelatedTo: aClass do: aBlock [
 
 	self classesRelatedTo: actualClass do: [:each |
 		((localScopeClass metaLevelForHierarchyOf: each) = each) ifTrue: [
-			each isObsolete ifFalse: [ self metaLevelsOf: each do: aBlock].
+			self metaLevelsOf: each do: aBlock.
 			self allClassesRelatedTo: each do: aBlock]]
 ]
 

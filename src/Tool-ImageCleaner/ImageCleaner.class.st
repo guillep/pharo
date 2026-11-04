@@ -93,7 +93,6 @@ ImageCleaner >> cleanUpForRelease [
 	Smalltalk
 		garbageCollect;
 		cleanOutUndeclared;
-		fixObsoleteReferences;
 		removeEmptyMessageCategories;
 		cleanUp: true except: #(  ).
 

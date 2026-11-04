@@ -91,57 +91,38 @@ WeakMessageSend >> ensureArguments [
 ]
 
 { #category : 'private' }
-WeakMessageSend >> ensureReceiver [
-  "Return true if my receiver hasn't gone away"
-  self receiver ifNil: [^ false].
-  (self receiver class isObsolete) ifTrue: [^ false].
-  (self receiver isBehavior and: [self receiver isObsolete]) ifTrue: [^ false].
-  ^ true
-]
-
-{ #category : 'private' }
 WeakMessageSend >> ensureReceiver: anObject [
-  "Return true if my receiver hasn't gone away"
-  anObject ifNil: [^ false].
-  (anObject class isObsolete) ifTrue: [^ false].
-  (anObject isBehavior and: [anObject isObsolete]) ifTrue: [^ false].
-  ^ true
+	"Return true if my receiver hasn't gone away"
+
+	^ anObject isNotNil
 ]
 
 { #category : 'private' }
 WeakMessageSend >> ensureReceiverAndArguments [
+	"Return true if my receiver hasn't gone away"
 
-  "Return true if my receiver hasn't gone away"
-  self receiver ifNil: [^ false].
-  (self receiver class isObsolete) ifTrue: [^ false].
-  (self receiver isBehavior and: [self receiver isObsolete]) ifTrue: [^ false].
+	self receiver ifNil: [ ^ false ].
 
-  "Make sure that my arguments haven't gone away"
-  arguments ifNotNil: [
-    arguments with: shouldBeNil do: [ :arg :flag |
-      arg ifNil: [ flag ifFalse: [ ^false ]]
-    ]
-  ].
+	"Make sure that my arguments haven't gone away"
+	arguments ifNotNil: [ 
+		arguments with: shouldBeNil do: [ :arg :flag | 
+			arg ifNil: [ flag ifFalse: [ ^ false ] ] ] ].
 
-  ^true
+	^ true
 ]
 
 { #category : 'private' }
 WeakMessageSend >> ensureReceiverAndArguments: aReceiver [
+	"Return true if my receiver hasn't gone away"
 
-  "Return true if my receiver hasn't gone away"
-  aReceiver ifNil: [^ false].
-  (aReceiver class isObsolete) ifTrue: [^ false].
-  (aReceiver isBehavior and: [self receiver isObsolete]) ifTrue: [^ false].
+	aReceiver ifNil: [ ^ false ].
 
-  "Make sure that my arguments haven't gone away"
-  arguments ifNotNil: [
-    arguments with: shouldBeNil do: [ :arg :flag |
-      arg ifNil: [ flag ifFalse: [ ^false ]]
-    ]
-  ].
+	"Make sure that my arguments haven't gone away"
+	arguments ifNotNil: [ 
+		arguments with: shouldBeNil do: [ :arg :flag | 
+			arg ifNil: [ flag ifFalse: [ ^ false ] ] ] ].
 
-  ^true
+	^ true
 ]
 
 { #category : 'private' }

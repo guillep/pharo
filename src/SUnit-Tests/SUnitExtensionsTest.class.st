@@ -144,13 +144,13 @@ SUnitExtensionsTest >> testErrorInRaiseWithExceptionDo [
 
 { #category : 'tests' }
 SUnitExtensionsTest >> testExceptionWithMatchingString [
-	self should: [ Object obsolete ] raise: Error whoseDescriptionIncludes: 'NOT obsolete' description: 'tested obsoleting Object'
+	self should: [ self error: 'WATERHVER' ] raise: Error whoseDescriptionIncludes: 'TERHV' description: 'tested obsoleting Object'
 ]
 
 { #category : 'tests' }
 SUnitExtensionsTest >> testExceptionWithoutMatchingString [
 	self
-		should: [ Object obsolete ]
+		should: [ self error: 'NON INCLUDINGGG' ]
 		raise: Error
 		whoseDescriptionDoesNotInclude: 'Zero'
 		description: 'tested obsoleting Object'

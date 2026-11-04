@@ -955,31 +955,14 @@ ClassDescription >> sharedPools [
 ClassDescription >> sharedPoolsOn: aStream [
 	"Answer a string of my shared pool names separated by spaces."
 
-	self sharedPools
-		do: [ :each |
-				aStream nextPutAll: (self environment
-					keyAtIdentityValue: each
-					ifAbsent: [
-						each isObsolete
-							ifTrue: [ each name ] "obsolete classes should be visible"
-							ifFalse: [ 'private' ] ]) ] "if class is from different environment, mark it as private"
-			separatedBy: [ aStream space ]
+	self sharedPools do: [ :each | aStream nextPutAll: each name ] separatedBy: [ aStream space ]
 ]
 
 { #category : 'pool variable' }
 ClassDescription >> sharedPoolsString [
 	"Answer a string of my shared pool names separated by spaces."
 
-	^String streamContents: [ :stream |
-		self sharedPools
-			do: [ :each |
-				stream nextPutAll: (self environment
-					keyAtIdentityValue: each
-					ifAbsent: [
-						each isObsolete
-							ifTrue: [ each name ] "obsolete classes should be visible"
-							ifFalse: [ 'private' ] ]) ] "if class is from different environment, mark it as private"
-			separatedBy: [ stream space ] ]
+	^ String streamContents: [ :stream | self sharedPools do: [ :each | each name ] separatedBy: [ stream space ] ]
 ]
 
 { #category : 'slots' }

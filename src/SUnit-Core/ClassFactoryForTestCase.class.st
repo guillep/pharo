@@ -110,7 +110,6 @@ ClassFactoryForTestCase >> delete: aBehavior [
 
 	| name |
 	createdBehaviors remove: aBehavior ifAbsent: [  ].
-	aBehavior isObsolete ifTrue: [ ^ self ].
 	name := aBehavior name. "save it as it will be obsolete later"
 	(createdSilently includes: aBehavior)
 		ifTrue: [

@@ -70,7 +70,7 @@ PackageAnnouncementsTest >> testAnnouncementClassRemovedIsRaisedOnRemoveFromSyst
 	class := self newClassNamed: #NewClass in: xPackage.
 
 	self when: ClassRemoved do: [ :ann |
-		self assert: ann classRemoved originalName equals: #NewClass.
+		self assert: ann classRemoved name equals: #NewClass.
 		self assert: ann packageAffected identicalTo: xPackage ].
 
 	class removeFromSystem.

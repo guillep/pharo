@@ -67,12 +67,6 @@ Class class >> hasNoSuperclassesOf: aClass in: unprocessedClasses cache: cache [
 	^ (unprocessedClasses includesAnyOf: (self allSuperclassesFor: aClass cache: cache)) not
 ]
 
-{ #category : 'class initialization' }
-Class class >> initialize [
-
-	ObsoleteClasses := WeakIdentitySet new
-]
-
 { #category : 'file in/out' }
 Class class >> superclassOrder: classes [
     "Arrange the classes in the collection, classes, in superclass order so the
@@ -665,18 +659,6 @@ Class >> isClassOrTrait [
 ]
 
 { #category : 'testing' }
-Class >> isObsolete [
-	"Return true if the receiver is obsolete."
-	<reflection: 'Class structural inspection - Class kind testing'>
-	^ ObsoleteClasses includes: self
-]
-
-{ #category : 'self evaluating' }
-Class >> isSelfEvaluating [
-	^self isObsolete not
-]
-
-{ #category : 'testing' }
 Class >> isUsed [
 	<reflection: 'Class structural inspection - Class kind testing'>
 	^ self hasSubclasses
@@ -734,15 +716,15 @@ Class >> newSubclass [
 { #category : 'initialization' }
 Class >> obsolete [
 	"Change the receiver and all of its subclasses to an obsolete class."
-	self == Object
-		ifTrue: [^self error: 'Object is NOT obsolete'].
-	self setName: 'AnObsolete' , self name.
+	
+	"Store nil over class instVars."
 	Object class instSize + 1 to: self classSide instSize do:
-		[:i | self instVarAt: i put: nil]. "Store nil over class instVars."
+		[:i | self instVarAt: i put: nil].
 	self classPool: nil.
 	self sharedPools: nil.
+
 	self hasClassSide ifTrue: [ self classSide obsolete].
-	ObsoleteClasses add: self.
+
 	super obsolete
 ]
 
@@ -831,8 +813,6 @@ Class >> removeFromSystem: logged [
 
 	self release.
 	self unload.
-
-	self superclass ifNotNil: [ "If we have no superclass there's nothing to be remembered" self superclass addObsoleteSubclass: self ].
 
 	"we add the class to Undeclared so that if references still exist, they will  be automatically fixed if this class is loaded again. We do not check if references exist as it is too slow"
 	
@@ -933,11 +913,9 @@ Class >> setName: aSymbol [
 
 { #category : 'pool variables' }
 Class >> sharedPoolNames [
+
 	<reflection: 'Class structural inspection - Shared pool inspection'>
-	^ self sharedPools collect: [:ea |
-		ea isObsolete
-			ifTrue: [ ea name ]
-			ifFalse: [ self environment keyAtIdentityValue: ea ] ]
+	^ self sharedPools collect: [ :ea | ea name ]
 ]
 
 { #category : 'pool variables' }

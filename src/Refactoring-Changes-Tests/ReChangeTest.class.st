@@ -123,7 +123,6 @@ ReChangeTest >> testAddClassPattern [
 	"Make sure that all class definitions can be parsed."
 
 	self exampleClasses do: [ :class |
-		(class isObsolete or: [ class superclass isNotNil and: [ class superclass isObsolete ] ]) ifFalse: [
 			| change |
 			change := changes defineClass: [ :aBuilder | aBuilder fillFor: class ].
 			self assert: (change isKindOf: ReAddClassChange).
@@ -139,7 +138,7 @@ ReChangeTest >> testAddClassPattern [
 			self assert: change sharedPoolNames equals: class sharedPoolNames asArray.
 			self assert: change package equals: class package name.
 			self assert: change tag equals: class packageTag name.
-			self universalTestFor: change ] ]
+			self universalTestFor: change ]
 ]
 
 { #category : 'tests' }
@@ -282,16 +281,15 @@ ReChangeTest >> testPerformAddRemoveClass [
 
 	| change |
 	change := changes defineClass: [ :aBuilder |
-		          aBuilder
-			          superclass: Object;
-			          name: self changeMockClass name , 'Temporary';
-			          package: self class package name ].
+			          aBuilder
+				          superclass: Object;
+				          name: self changeMockClass name , 'Temporary';
+				          package: self class package name ].
 	self performAndUndoChange: change do: [
-		self assert: (workingEnvironment hasClassNamed: change changeClassName).
-		self assert: change definedClass name equals: change changeClassName.
-		self assert: change definedClass isBehavior ].
-	self deny: (workingEnvironment hasClassNamed: change changeClassName).
-	self assert: change definedClass isObsolete
+			self assert: (workingEnvironment hasClassNamed: change changeClassName).
+			self assert: change definedClass name equals: change changeClassName.
+			self assert: change definedClass isBehavior ].
+	self deny: (workingEnvironment hasClassNamed: change changeClassName)
 ]
 
 { #category : 'tests - perform' }
@@ -308,16 +306,15 @@ ReChangeTest >> testPerformAddRemoveClassInteractively [
 
 	| change |
 	change := changeFactory addClassDefinition: [ :aBuilder |
-		          aBuilder
-			          superclass: Object;
-			          name: self changeMockClass name , 'Temporary';
-			          package: self class package name ].
+			          aBuilder
+				          superclass: Object;
+				          name: self changeMockClass name , 'Temporary';
+				          package: self class package name ].
 	self performAndUndoChange: change do: [
-		self assert: (workingEnvironment hasClassNamed: change changeClassName).
-		self assert: change definedClass name equals: change changeClassName.
-		self assert: change definedClass isBehavior ].
-	self deny: (workingEnvironment hasClassNamed: change changeClassName).
-	self assert: change definedClass isObsolete
+			self assert: (workingEnvironment hasClassNamed: change changeClassName).
+			self assert: change definedClass name equals: change changeClassName.
+			self assert: change definedClass isBehavior ].
+	self deny: (workingEnvironment hasClassNamed: change changeClassName)
 ]
 
 { #category : 'tests - perform' }

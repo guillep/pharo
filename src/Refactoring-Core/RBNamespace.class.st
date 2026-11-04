@@ -121,7 +121,7 @@ RBNamespace >> allClassesDo: aBlock [
 
 	| classes |
 	classes := Set new: 4096.
-	environment classesDo: [ :class | class isObsolete ifFalse: [self classFor: class]  ].
+	environment classesDo: [ :class | self classFor: class ].
 	classes addAll: newClasses values flattened.
 	classes addAll: changedClasses value flattened.
 	
@@ -136,28 +136,27 @@ RBNamespace >> allClassesInPackages: aColl do: aBlock [
 	| seen evalBlock |
 	seen := Set new.
 	evalBlock := [ :class |
-	             seen add: class first name.
-	             aBlock
-		             value: class first;
-		             value: class last ].
+		             seen add: class first name.
+		             aBlock
+			             value: class first;
+			             value: class last ].
 	(newClasses select: [ :class |
-		 | classPackage |
-		 classPackage := class first packageName.
-		 aColl anySatisfy: [ :packageName | packageName sameAs: classPackage ] ]) do: evalBlock.
+			 | classPackage |
+			 classPackage := class first packageName.
+			 aColl anySatisfy: [ :packageName | packageName sameAs: classPackage ] ]) do: evalBlock.
 	(changedClasses select: [ :class |
-		 | classPackage |
-		 classPackage := class first packageName.
-		 aColl anySatisfy: [ :packageName | packageName sameAs: classPackage ] ]) do: evalBlock.
+			 | classPackage |
+			 classPackage := class first packageName.
+			 aColl anySatisfy: [ :packageName | packageName sameAs: classPackage ] ]) do: evalBlock.
 	self environment classesInPackages: aColl do: [ :each |
-		each isObsolete ifFalse: [
 			| class |
 			class := each instanceSide.
 			((seen includes: class name) or: [ self hasRemoved: (self classNameFor: class) ]) ifFalse: [
-				(class := self classFor: each) ifNotNil: [
-					seen add: class name.
-					aBlock
-						value: class;
-						value: class classSide ] ] ] ]
+					(class := self classFor: each) ifNotNil: [
+							seen add: class name.
+							aBlock
+								value: class;
+								value: class classSide ] ] ]
 ]
 
 { #category : 'accessing' }

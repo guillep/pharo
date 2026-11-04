@@ -233,17 +233,6 @@ ClassAnnotationTest >> testNotSimilarToDifferentKindAnnotation [
 ]
 
 { #category : 'tests' }
-ClassAnnotationTest >> testObsolete [
-	| annotation |
-	annotation := ClassWithSingleAnnotation classAnnotations anyOne.
-	self deny: annotation isObsolete.
-
-	ClassAnnotation registry forgetAnnotation: annotation.
-
-	self assert: annotation isObsolete
-]
-
-{ #category : 'tests' }
 ClassAnnotationTest >> testRedefiningInstance [
 	| annotation newAnnotation |
 	annotation := ClassWithSingleAnnotation classAnnotations anyOne.

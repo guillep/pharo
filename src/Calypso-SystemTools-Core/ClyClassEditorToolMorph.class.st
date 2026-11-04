@@ -55,11 +55,6 @@ ClyClassEditorToolMorph >> belongsToCurrentBrowserContext [
 		or: [ browser isClassSelected: editingClass instanceSide ]
 ]
 
-{ #category : 'testing' }
-ClyClassEditorToolMorph >> belongsToRemovedBrowserContext [
-	^editingClass isObsolete
-]
-
 { #category : 'controlling' }
 ClyClassEditorToolMorph >> detachFromSystem [
 

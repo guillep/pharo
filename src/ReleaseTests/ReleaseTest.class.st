@@ -449,24 +449,6 @@ ReleaseTest >> testNoSuperInitializeOnClassSideInitialization [
 	self assertValidLintRule: ReDoNotSendSuperInitializeInClassSideRule new
 ]
 
-{ #category : 'tests' }
-ReleaseTest >> testObsoleteClasses [
-	| obsoleteClasses |
-
-	Smalltalk fixObsoleteReferences.
-	Smalltalk garbageCollect.
-	obsoleteClasses := SystemNavigation new obsoleteClasses
-		reject: [ :each | each isAnonymous or: [ (self allowedObsoletes includes: each name) ] ].
-
-	self
-		assert: obsoleteClasses isEmpty
-		description: [
-			String streamContents: [ :s|
-				s
-					nextPutAll: 'Obsolete classes remaining: ';
-					print: obsoleteClasses ]]
-]
-
 { #category : 'tests - announcer' }
 ReleaseTest >> testOnlyWeakSubscriptions [
 

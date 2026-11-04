@@ -223,11 +223,11 @@ EpMonitor >> behaviorRemoved: aClassRemovedAnnouncement [
 	"Fix class name (remove AnObsolete prefix)"
 	classRemoved definitionSource: (classRemoved definitionSource
 			 copyReplaceAll: aClassRemovedAnnouncement classRemoved name
-			 with: aClassRemovedAnnouncement classRemoved originalName).
+			 with: aClassRemovedAnnouncement classRemoved name).
 
 	"Fix class name in the metaclass"
 	classRemoved classSide definitionSource:
-		(classRemoved classSide definitionSource copyReplaceAll: aClassRemovedAnnouncement classRemoved name with: aClassRemovedAnnouncement classRemoved originalName).
+		(classRemoved classSide definitionSource copyReplaceAll: aClassRemovedAnnouncement classRemoved name with: aClassRemovedAnnouncement classRemoved name).
 
 	"Fix category"
 	toReplace := (classRemoved definitionSource includesSubstring: '_UnpackagedPackage')
@@ -238,7 +238,7 @@ EpMonitor >> behaviorRemoved: aClassRemovedAnnouncement [
 		copyReplaceAll: toReplace 
 		with: 'package: ' , aClassRemovedAnnouncement packageTagAffected categoryName).
 
-	classRemoved name: aClassRemovedAnnouncement classRemoved originalName.
+	classRemoved name: aClassRemovedAnnouncement classRemoved name.
 	classRemoved package: aClassRemovedAnnouncement packageAffected name.
 	classRemoved packageTag: aClassRemovedAnnouncement packageTagAffected name.
 
@@ -260,7 +260,7 @@ EpMonitor >> behaviorRemovedImpliesMethodRemoved: aMethodInAnObsoleteBehavior de
 	packageName = UndefinedPackage undefinedPackageName ifTrue: [ packageName := aSymbol ].
 
 	self addEvent: (EpMethodRemoval method: (aMethodInAnObsoleteBehavior asEpiceaRingDefinition
-				  parentName: aMethodInAnObsoleteBehavior methodClass originalName;
+				  parentName: aMethodInAnObsoleteBehavior methodClass name;
 				  protocol: aMethodInAnObsoleteBehavior protocolName;
 				  package: packageName;
 				  yourself))

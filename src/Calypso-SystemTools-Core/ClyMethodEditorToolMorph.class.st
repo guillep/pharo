@@ -51,13 +51,6 @@ ClyMethodEditorToolMorph >> allowsDifferentActivationPriority [
 	^false
 ]
 
-{ #category : 'testing' }
-ClyMethodEditorToolMorph >> belongsToRemovedBrowserContext [
-	super belongsToRemovedBrowserContext ifTrue: [ ^true ].
-
-	^self methodClass isObsolete
-]
-
 { #category : 'building' }
 ClyMethodEditorToolMorph >> buildTextMorph [
 	super buildTextMorph.

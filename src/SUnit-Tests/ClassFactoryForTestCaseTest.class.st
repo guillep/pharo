@@ -72,7 +72,6 @@ ClassFactoryForTestCaseTest >> testPackageCleanUp [
 	2 timesRepeat: [ factory make: [ :aBuilder | aBuilder tag: #Two ] ].
 	createdClassNames := factory createdClassNames.
 	factory cleanUp.
-	self assert: (factory createdClasses allSatisfy: [ :class | class isObsolete ]).
 	allClasses := self environment allClasses.
 	self assert: (factory createdClasses noneSatisfy: [ :class | allClasses includes: class ]).
 	self assertEmpty: (self organization packages select: [ :package | package name beginsWith: factory packageName ])

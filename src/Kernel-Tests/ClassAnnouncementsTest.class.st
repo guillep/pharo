@@ -21,7 +21,7 @@ ClassAnnouncementsTest >> testDuplicatingAClassAnnouncesAddition [
 	class compile: 'billy ^ #meow' classified: '*' , self packageNameForTests , '2'.
 
 	self when: ClassAdded do: [ :ann |
-		self assert: ann classAffected originalName equals: self classNameForTests, '2'.
+		self assert: ann classAffected name equals: self classNameForTests, '2'.
 		self assert: ann packageAffected name equals: self packageNameForTests.
 		self assertCollection: (ann packagesAffected collect: [ :package | package name ]) hasSameElements: { self packageNameForTests } ].
 
@@ -37,7 +37,7 @@ ClassAnnouncementsTest >> testRemovingAClassWithExtension [
 	class compile: 'billy ^ #meow' classified: '*' , self packageNameForTests , '2'.
 
 	self when: ClassRemoved do: [ :ann |
-		self assert: ann classAffected originalName equals: self classNameForTests.
+		self assert: ann classAffected name equals: self classNameForTests.
 		self assert: ann packageAffected name equals: self packageNameForTests.
 		self assertCollection: (ann packagesAffected collect: [ :package | package name ]) hasSameElements: {
 				self packageNameForTests.

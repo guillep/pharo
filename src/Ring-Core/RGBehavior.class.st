@@ -613,12 +613,6 @@ RGBehavior >> isImmediateClass [
 ]
 
 { #category : 'testing' }
-RGBehavior >> isObsolete [
-
-	^ false
-]
-
-{ #category : 'testing' }
 RGBehavior >> isPointers [
 
 	^ self isBits not

@@ -210,23 +210,9 @@ Metaclass >> isMetaclassOfClassOrNil [
 ]
 
 { #category : 'testing' }
-Metaclass >> isObsolete [
-	"Return true if the receiver is obsolete"
-	<reflection: 'Class structural inspection - Class kind testing'>
-	^self soleInstance isNil "Either no thisClass"
-		or:[self soleInstance classSide ~~ self "or I am not the class of thisClass"
-			or:[self soleInstance isObsolete]] "or my instance is obsolete"
-]
-
-{ #category : 'testing' }
 Metaclass >> isReferenced [
 	"Metaclasses are never directly referenced in code"
 	^false
-]
-
-{ #category : 'testing' }
-Metaclass >> isSelfEvaluating [
-	^self isObsolete not
 ]
 
 { #category : 'testing' }
@@ -259,14 +245,6 @@ Metaclass >> new [
 Metaclass >> newAnonymousSubclass [
 	<reflection: 'Class structural modification - Anonymous class creation'>
 	^self instanceSide newAnonymousSubclass class
-]
-
-{ #category : 'class hierarchy' }
-Metaclass >> obsoleteSubclasses [
-	"Answer the receiver's subclasses."
-	<reflection: 'Class structural inspection - Iterating and querying hierarchy'>
-	self isMetaclassOfClassOrNil ifTrue: [ ^ #() ].
-	^ self instanceSide obsoleteSubclasses collect: [ :aSubclass | aSubclass classSide ]
 ]
 
 { #category : 'accessing' }
