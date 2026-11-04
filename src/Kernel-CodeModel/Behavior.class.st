@@ -11,7 +11,8 @@ Class {
 		'layout'
 	],
 	#classVars : [
-		'ClassProperties'
+		'ClassProperties',
+        'ObsoleteSubclasses'
 	],
 	#category : 'Kernel-CodeModel-Classes',
 	#package : 'Kernel-CodeModel',

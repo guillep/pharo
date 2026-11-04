@@ -556,6 +556,12 @@ ClassDescription >> isProtocolExtensionFromTheSamePackage: aProtocol [
 	^ (self packageOrganizer packageMatchingExtensionName: protocolName allButFirst) = self package
 ]
 
+{ #category : 'self evaluating' }
+ClassDescription >> isSelfEvaluating [
+
+	^ self isAnonymous not
+]
+
 { #category : 'testing' }
 ClassDescription >> isTaggedWith: aSymbol [
 
